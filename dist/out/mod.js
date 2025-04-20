@@ -42,53 +42,98 @@ const originalEndRaid_1 = __importDefault(require("./originalEndRaid"));
 const itemTransferHelper_1 = __importDefault(require("./itemTransferHelper"));
 const playerStatusDetails_1 = __importDefault(require("./playerStatusDetails"));
 const inventoryHelpers_1 = __importStar(require("./inventoryHelpers"));
-const config = {
-    // The whole point of the Mod
-    // Set to false to keep your items
-    // Works for that too 👍
-    DoRandomItemLossOnDeath: true,
-    // This is percentage of total items.
-    // I.E. 10 items => 50% roll = 5 items removed
-    LossPercentages: {
-        // They are gonna go thru ur bag.
-        bag: { min: 20, max: 50 },
-        // They might pat you down for mags, but who's keepin' stuff in there right?
-        vest: { min: 0, max: 20 },
-        // A good chance if someone kills ya- they'll go thru ur pockets
-        pocket: { min: 20, max: 100 },
-    },
-    // Items with durability will lose some on death
-    DoDurabilityLoss: true,
-    // For ~5 raids you can keep ur shit
-    DurabilityLossPercentages: {
-        // Very good change u got Head/Eyes'd- I want a break.
-        Helmet: { min: 5, max: 10 },
-        // Maybe they hir ur vest too, who am I to say.
-        Vest: { min: 10, max: 15 },
-        PrimaryWeapon: { min: 15, max: 25 },
-        SecondaryWeapon: { min: 10, max: 25 },
-        HolsterWeapon: { min: 10, max: 20 },
-    },
-    RemoveFIR: {
-        // I love a good actually secure container
-        SecureContainerItems: false,
-        Backpack: true,
-        BackpackItems: true,
-        Vest: true,
-        VestItems: true,
-        PocketItems: true,
-        PrimaryWeapon: true,
-        SecondaryWeapon: true,
-        HolsterWeapon: true,
-    },
-};
+const config = __importStar(require("./config.json"));
+// class Config {
+//     public static ConfigPath = "./config.json";
+//     // The whole point of the Mod
+//     // Set to false to keep your items
+//     // Works for that too 👍
+//     DoRandomItemLossOnDeath: boolean;
+//     // This is percentage of total items.
+//     // I.E. 10 items => 50% roll = 5 items removed
+//     ItemLossPercentages: {
+//         // They are gonna go thru ur bag.
+//         bag: { min: number; max: number };
+//         // They might pat you down for mags, but who's keepin' stuff in there right?
+//         vest: { min: number; max: number };
+//         // A good chance if someone kills ya- they'll go thru ur pockets
+//         pocket: { min: number; max: number };
+//     };
+//     // Items with durability will lose some on death
+//     DoDurabilityLoss: boolean;
+//     // For ~5 raids you can keep ur shit
+//     DurabilityLossPercentages: {
+//         // Very good change u got Head/Eyes'd- I want a break.
+//         Helmet: { min: number; max: number };
+//         // Maybe they hir ur vest too, who am I to say.
+//         Vest: { min: number; max: number };
+//         PrimaryWeapon: { min: number; max: number };
+//         SecondaryWeapon: { min: number; max: number };
+//         HolsterWeapon: { min: number; max: number };
+//     };
+//     RemoveFIR: {
+//         // I love a good actually secure container
+//         SecureContainerItems: boolean;
+//         Helmet: boolean;
+//         Backpack: boolean;
+//         BackpackItems: boolean;
+//         Vest: boolean;
+//         VestItems: boolean;
+//         PocketItems: boolean;
+//         PrimaryWeapon: boolean;
+//         SecondaryWeapon: boolean;
+//         HolsterWeapon: boolean;
+//     };
+//     constructor(json: { [key: string]: any }) {
+//         this.DoDurabilityLoss = json["DoDurabilityLoss"];
+//         this.DurabilityLossPercentages = json["DurabilityLossPercentages"];
+//         this.ItemLossPercentages = json["ItemLossPercentages"];
+//         this.DoRandomItemLossOnDeath = json["DoRandomItemLossOnDeath"];
+//         this.RemoveFIR = json["RemoveFIR"];
+//     }
+//     verify(logger: ILogger) {
+//         logger.success(`DoDurabilityLoss: ${this.DoDurabilityLoss}\n`);
+//         logger.success(`DurabilityLossPercentages -`);
+//         logger.success(`\t- ${this.DurabilityLossPercentages.Helmet}`);
+//         logger.success(`\t- ${this.DurabilityLossPercentages.Vest}`);
+//         logger.success(`\t- ${this.DurabilityLossPercentages.PrimaryWeapon}`);
+//         logger.success(`\t- ${this.DurabilityLossPercentages.SecondaryWeapon}`);
+//         logger.success(`\t- ${this.DurabilityLossPercentages.HolsterWeapon}\n`);
+//         logger.success(`DoRandomItemLossOnDeath: ${this.DoRandomItemLossOnDeath}\n`);
+//         logger.success(`ItemLossPercentages -`);
+//         logger.success(`\t- ${this.ItemLossPercentages.vest}`);
+//         logger.success(`\t- ${this.ItemLossPercentages.pocket}`);
+//         logger.success(`\t- ${this.ItemLossPercentages.bag}\n`);
+//         logger.success(`RemoveFIR -`);
+//         logger.success(`\t- ${this.RemoveFIR.Helmet}`);
+//         logger.success(`\t- ${this.RemoveFIR.Vest}`);
+//         logger.success(`\t- ${this.RemoveFIR.VestItems}`);
+//         logger.success(`\t- ${this.RemoveFIR.PocketItems}`);
+//         logger.success(`\t- ${this.RemoveFIR.Backpack}`);
+//         logger.success(`\t- ${this.RemoveFIR.BackpackItems}`);
+//         logger.success(`\t- ${this.RemoveFIR.PrimaryWeapon}`);
+//         logger.success(`\t- ${this.RemoveFIR.SecondaryWeapon}`);
+//         logger.success(`\t- ${this.RemoveFIR.HolsterWeapon}`);
+//         logger.success(`\t- ${this.RemoveFIR.SecureContainerItems}\n`);
+//     }
+// }
 class Mod {
     static container;
+    // private static config: Config;
     static _helpers;
     static get helpers() {
         this._helpers = helpers_1.default.get(Mod.container);
         return Mod._helpers;
     }
+    // private static readSetConfig() {
+    //     const fileContents = readFileSync(Config.ConfigPath, { encoding: "utf-8" });
+    //     const commentsStripped = fileContents
+    //         .split("\n")
+    //         .filter((line) => !line.startsWith("//"))
+    //         .join("\n");
+    //     Mod.config = JSON.parse(commentsStripped);
+    //     Mod.config.verify(Mod.helpers.logger);
+    // }
     static removeFIRFromInventory(inventory) {
         const dbItems = Mod.helpers.databaseService.getItems();
         const itemsToRemovePropertyFrom = inventory.filter((item) => 
@@ -127,6 +172,16 @@ class Mod {
             Durability: newCurrentDurability,
             MaxDurability: newCurrentMaxDurability,
         };
+        // the code below generates a random degradation on the weapon durability
+        const randomisedWearAmount = options && options.isArmor
+            ? originalEndRaid_1.default.getRandomisedArmorRepairDegradationValue(srcDetails._props.ArmorMaterial, false, itemCurrentMaxDurability, 1.0)
+            : originalEndRaid_1.default.getRandomisedWeaponRepairDegradationValue(srcDetails._props, false, itemCurrentMaxDurability, 1.0);
+        // Apply wear to durability
+        src.upd.Repairable.MaxDurability -= randomisedWearAmount;
+        // After adjusting max durability with degradation, ensure current dura isnt above max
+        if (src.upd.Repairable.Durability > src.upd.Repairable.MaxDurability) {
+            src.upd.Repairable.Durability = src.upd.Repairable.MaxDurability;
+        }
     }
     static selectPercentageOfItems(src, percentage) {
         const selections = [];
@@ -200,11 +255,39 @@ class Mod {
         // Holster After
     }
     static doFIRChange(playerInv) {
-        Mod.helpers.logger.log(`RemoveFIRFromBackpack: ${config.RemoveFIR.BackpackItems}`, "yellow");
+        // God damn this one is ugly too
+        Mod.helpers.logger.log(`RemoveFIRFromPrimary: ${config.RemoveFIR.PrimaryWeapon}`, "yellow");
+        if (config.RemoveFIR.PrimaryWeapon && playerInv.primary) {
+            Mod.removeFIRFromInventory([playerInv.primary]);
+        }
+        Mod.helpers.logger.log(`RemoveFIRFromSecondary: ${config.RemoveFIR.SecondaryWeapon}`, "yellow");
+        if (config.RemoveFIR.SecondaryWeapon && playerInv.secondary) {
+            Mod.removeFIRFromInventory([playerInv.secondary]);
+        }
+        Mod.helpers.logger.log(`RemoveFIRFromHolster: ${config.RemoveFIR.HolsterWeapon}`, "yellow");
+        if (config.RemoveFIR.HolsterWeapon && playerInv.holsterWeapon) {
+            Mod.removeFIRFromInventory([playerInv.holsterWeapon]);
+        }
+        Mod.helpers.logger.log(`RemoveFIRFromHelmet: ${config.RemoveFIR.Helmet}`, "yellow");
+        if (config.RemoveFIR.Helmet && playerInv.helmet) {
+            Mod.removeFIRFromInventory([playerInv.helmet]);
+        }
+        Mod.helpers.logger.log(`RemoveFIRFromBackpack: ${config.RemoveFIR.Backpack}`, "yellow");
+        if (config.RemoveFIR.Backpack && playerInv.bag) {
+            Mod.removeFIRFromInventory([playerInv.bag]);
+        }
+        Mod.helpers.logger.log(`RemoveFIRFromBackpackItems: ${config.RemoveFIR.BackpackItems}`, "yellow");
         if (config.RemoveFIR.BackpackItems) {
             Mod.removeFIRFromInventory(playerInv.bagItems);
         }
         Mod.helpers.logger.log(`RemoveFIRFromVest: ${config.RemoveFIR.Vest}`, "yellow");
+        if (config.RemoveFIR.Vest && playerInv.tacticalVest) {
+            Mod.removeFIRFromInventory([playerInv.tacticalVest]);
+        }
+        if (config.RemoveFIR.Vest && playerInv.armorVest) {
+            Mod.removeFIRFromInventory([playerInv.armorVest]);
+        }
+        Mod.helpers.logger.log(`RemoveFIRFromVestItems: ${config.RemoveFIR.VestItems}`, "yellow");
         if (config.RemoveFIR.VestItems) {
             Mod.removeFIRFromInventory(playerInv.tacticalVestItems);
         }
@@ -218,11 +301,11 @@ class Mod {
         }
     }
     static doRemoval(playerInv, playerData, sessionID) {
-        const bagRemoval = Mod.selectPercentageOfItems(playerInv.bagItems, config.LossPercentages.bag);
+        const bagRemoval = Mod.selectPercentageOfItems(playerInv.bagItems, config.ItemLossPercentages.bag);
         inventoryHelpers_1.default.dumpInventory(bagRemoval, "Bag Removal", "red");
-        const pocketRemoval = Mod.selectPercentageOfItems(playerInv.pocketItems, config.LossPercentages.pocket);
+        const pocketRemoval = Mod.selectPercentageOfItems(playerInv.pocketItems, config.ItemLossPercentages.pocket);
         inventoryHelpers_1.default.dumpInventory(pocketRemoval, "Pocket Removal", "red");
-        const vestRemoval = Mod.selectPercentageOfItems(playerInv.bagItems, config.LossPercentages.vest);
+        const vestRemoval = Mod.selectPercentageOfItems(playerInv.bagItems, config.ItemLossPercentages.vest);
         inventoryHelpers_1.default.dumpInventory(vestRemoval, "Vest Removal", "red");
         for (const item of [...bagRemoval, ...pocketRemoval, ...vestRemoval]) {
             Mod.helpers.sptInventoryHelper.removeItem(playerData, item._id, sessionID);
@@ -244,6 +327,7 @@ class Mod {
     }
     preSptLoad(container) {
         Mod.container = container;
+        // Mod.readSetConfig();
         // Dear god do not forget to set helpers on other classes
         originalEndRaid_1.default.helpers = Mod.helpers;
         itemTransferHelper_1.default.helpers = Mod.helpers;

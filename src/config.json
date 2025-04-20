@@ -1,0 +1,28 @@
+{
+    "DoRandomItemLossOnDeath": true,
+    "ItemLossPercentages": {
+        "bag": { "min": 20, "max": 50 },
+        "vest": { "min": 0, "max": 20 },
+        "pocket": { "min": 20, "max": 100 }
+    },
+    "DoDurabilityLoss": true,
+    "DurabilityLossPercentages": {
+        "Helmet": { "min": 10, "max": 20 },
+        "Vest": { "min": 20, "max": 30 },
+        "PrimaryWeapon": { "min": 15, "max": 25 },
+        "SecondaryWeapon": { "min": 10, "max": 25 },
+        "HolsterWeapon": { "min": 10, "max": 25 }
+    },
+    "RemoveFIR": {
+        "SecureContainerItems": false,
+        "Helmet": true,
+        "Backpack": true,
+        "BackpackItems": true,
+        "Vest": true,
+        "VestItems": true,
+        "PocketItems": true,
+        "PrimaryWeapon": true,
+        "SecondaryWeapon": true,
+        "HolsterWeapon": true
+    }
+}

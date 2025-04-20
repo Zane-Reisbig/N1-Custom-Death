@@ -43,6 +43,8 @@ import { ISptProfile } from "@spt/models/eft/profile/ISptProfile";
 import { DependencyContainer } from "tsyringe";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { InventoryHelper } from "@spt/helpers/InventoryHelper";
+import { JsonUtil } from "@spt/utils/JsonUtil";
+import { FileSystem } from "@spt/utils/FileSystem";
 
 enum ConfigTypes {
     AIRDROP = "spt-airdrop",

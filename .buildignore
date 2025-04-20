@@ -1,4 +1,7 @@
-build.mjs
+/build.mjs
+/build.bat
+/build.bat - Shortcut.lnk
+/.gitattributes
 /.buildignore
 /.DS_Store
 /.editorconfig
@@ -11,7 +14,6 @@ build.mjs
 /.nvmrc
 /.prettierrc
 /.vscode
-/build.mjs
 /dist
 /images
 /mod.code-workspace
@@ -21,3 +23,4 @@ build.mjs
 /types
 /src
 /ignore
+
