@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PMCInventory = void 0;
+const enums_1 = require("./enums");
 class PMCInventory {
     helmet;
     helmetArmorPlates;
@@ -29,28 +30,28 @@ class PMCInventory {
             if (item.slotId?.startsWith("Headwear")) {
                 this.helmet = item;
             }
-            if (item.slotId?.startsWith("Backpack")) {
+            else if (item.slotId?.startsWith("Backpack")) {
                 this.bag = item;
             }
-            if (item.slotId?.startsWith("TacticalVest")) {
+            else if (item.slotId?.startsWith("TacticalVest")) {
                 this.tacticalVest = item;
             }
-            if (item.slotId?.startsWith("ArmorVest")) {
+            else if (item.slotId?.startsWith("ArmorVest")) {
                 this.armorVest = item;
             }
-            if (item.slotId?.startsWith("Pockets")) {
+            else if (item.slotId?.startsWith("Pockets")) {
                 this.pockets = item;
             }
-            if (item.slotId?.startsWith("FirstPrimary")) {
+            else if (item.slotId?.startsWith("FirstPrimary")) {
                 this.primary = item;
             }
-            if (item.slotId?.startsWith("SecondPrimary")) {
+            else if (item.slotId?.startsWith("SecondPrimary")) {
                 this.secondary = item;
             }
-            if (item.slotId?.startsWith("Holster")) {
+            else if (item.slotId?.startsWith("Holster")) {
                 this.holsterWeapon = item;
             }
-            if (item.slotId?.startsWith("SecuredContainer")) {
+            else if (item.slotId?.startsWith("SecuredContainer")) {
                 this.container = item;
             }
         }
@@ -63,26 +64,22 @@ class PMCInventory {
             const allVestItems = helpers.itemHelper
                 .findAndReturnChildrenAsItems(allPlayerItems, this.tacticalVest._id)
                 .slice(1);
-            this.tacticalVestItems = allVestItems.filter((i) => {
-                const itemName = helpers.itemHelper.getItemName(i._tpl);
-                // Take out integral inserts and plates
-                return !itemName.includes("plate") && !itemName.includes("insert");
-            });
-            this.armorVestPlates = allPlayerItems.filter((i) => {
-                const itemName = helpers.itemHelper.getItemName(i._tpl);
-                return ((itemName.includes("plate") || itemName.includes("insert")) &&
-                    !itemName.includes("plate carrier"));
-            });
+            this.tacticalVestItems = allVestItems.filter((i) => 
+            // Everything that is not an armor plate is our item inventory.
+            !helpers.itemHelper.isOfBaseclass(i._tpl, enums_1.BaseClasses.ARMOR_PLATE));
+            this.armorVestPlates = allPlayerItems.filter((i) => 
+            // Technically this means that un-equipped plates in your vest
+            //  inventory slots are included in this, but I don't know how you
+            //  would fit a plate in the item slots in there anyway.
+            helpers.itemHelper.isOfBaseclass(i._tpl, enums_1.BaseClasses.ARMOR_PLATE));
         }
-        // if (this.armorVest) {
-        //     this.armorVestPlates = helpers.itemHelper
-        //         .findAndReturnChildrenAsItems(allPlayerItems, this.armorVest._id)
-        //         .slice(1);
-        // }
         if (this.helmet) {
             this.helmetArmorPlates = helpers.itemHelper
                 .findAndReturnChildrenAsItems(allPlayerItems, this.helmet._id)
-                .slice(1);
+                .slice(1)
+                .filter((i) => 
+            // Don't want nvg's or anything
+            helpers.itemHelper.isOfBaseclass(i._tpl, enums_1.BaseClasses.ARMOR_PLATE));
         }
         if (this.pockets) {
             this.pocketItems = helpers.itemHelper
@@ -94,7 +91,9 @@ class PMCInventory {
             .slice(1);
         helpers.logger.log("Armor Plates", "yellow");
         this.armorVestPlates.forEach((i) => helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow"));
-        helpers.logger.log("Vest items", "yellow");
+        helpers.logger.log("Helmet Plates", "yellow");
+        this.helmetArmorPlates.forEach((i) => helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow"));
+        helpers.logger.log("Vest Items", "yellow");
         this.tacticalVestItems.forEach((i) => helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow"));
     }
     dump() {
@@ -111,6 +110,28 @@ class PMCInventory {
 exports.PMCInventory = PMCInventory;
 class InventoryHelpers {
     static helpers;
+    static removeFIRFromInventory(inventory) {
+        const dbItems = InventoryHelpers.helpers.databaseService.getItems();
+        const itemsToRemovePropertyFrom = inventory.filter((item) => 
+        // Has upd object + upd.SpawnedInSession property + not a quest item
+        item.upd?.SpawnedInSession && !dbItems[item._tpl]._props.QuestItem);
+        for (const item of itemsToRemovePropertyFrom) {
+            if (item.upd) {
+                item.upd.SpawnedInSession = false;
+            }
+        }
+    }
+    static selectPercentageOfItemsFromInventory(src, percentage) {
+        const selections = [];
+        const pAsDecimal = InventoryHelpers.helpers.randomUtil.randInt(percentage.min, percentage.max + 1) / 100;
+        InventoryHelpers.helpers.logger.log(`Taking "${Math.floor(pAsDecimal * 100)}%" of "${src.length}" items"`, "yellow");
+        let itemsToTake = Math.floor(src.length * pAsDecimal);
+        while (itemsToTake > 0) {
+            selections.push(InventoryHelpers.helpers.randomUtil.getArrayValue(src));
+            itemsToTake--;
+        }
+        return selections;
+    }
     static dumpInventory(inventory, label, color) {
         if (inventory == null) {
             this.helpers.logger.log(`Inventory${label ? `: ${label}` : "-"}\nInventory was null or undefined!`, "Red");

@@ -45,36 +45,7 @@ import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { InventoryHelper } from "@spt/helpers/InventoryHelper";
 import { JsonUtil } from "@spt/utils/JsonUtil";
 import { FileSystem } from "@spt/utils/FileSystem";
-
-enum ConfigTypes {
-    AIRDROP = "spt-airdrop",
-    BACKUP = "spt-backup",
-    BOT = "spt-bot",
-    PMC = "spt-pmc",
-    CORE = "spt-core",
-    HEALTH = "spt-health",
-    HIDEOUT = "spt-hideout",
-    HTTP = "spt-http",
-    IN_RAID = "spt-inraid",
-    INSURANCE = "spt-insurance",
-    INVENTORY = "spt-inventory",
-    ITEM = "spt-item",
-    LOCALE = "spt-locale",
-    LOCATION = "spt-location",
-    LOOT = "spt-loot",
-    MATCH = "spt-match",
-    PLAYERSCAV = "spt-playerscav",
-    PMC_CHAT_RESPONSE = "spt-pmcchatresponse",
-    QUEST = "spt-quest",
-    RAGFAIR = "spt-ragfair",
-    REPAIR = "spt-repair",
-    SCAVCASE = "spt-scavcase",
-    TRADER = "spt-trader",
-    WEATHER = "spt-weather",
-    SEASONAL_EVENT = "spt-seasonalevents",
-    LOST_ON_DEATH = "spt-lostondeath",
-    GIFTS = "spt-gifts",
-}
+import { ConfigTypes } from "./enums";
 
 export default class Helpers {
     logger: ILogger;

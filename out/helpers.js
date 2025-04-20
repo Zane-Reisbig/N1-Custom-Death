@@ -1,35 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ConfigTypes;
-(function (ConfigTypes) {
-    ConfigTypes["AIRDROP"] = "spt-airdrop";
-    ConfigTypes["BACKUP"] = "spt-backup";
-    ConfigTypes["BOT"] = "spt-bot";
-    ConfigTypes["PMC"] = "spt-pmc";
-    ConfigTypes["CORE"] = "spt-core";
-    ConfigTypes["HEALTH"] = "spt-health";
-    ConfigTypes["HIDEOUT"] = "spt-hideout";
-    ConfigTypes["HTTP"] = "spt-http";
-    ConfigTypes["IN_RAID"] = "spt-inraid";
-    ConfigTypes["INSURANCE"] = "spt-insurance";
-    ConfigTypes["INVENTORY"] = "spt-inventory";
-    ConfigTypes["ITEM"] = "spt-item";
-    ConfigTypes["LOCALE"] = "spt-locale";
-    ConfigTypes["LOCATION"] = "spt-location";
-    ConfigTypes["LOOT"] = "spt-loot";
-    ConfigTypes["MATCH"] = "spt-match";
-    ConfigTypes["PLAYERSCAV"] = "spt-playerscav";
-    ConfigTypes["PMC_CHAT_RESPONSE"] = "spt-pmcchatresponse";
-    ConfigTypes["QUEST"] = "spt-quest";
-    ConfigTypes["RAGFAIR"] = "spt-ragfair";
-    ConfigTypes["REPAIR"] = "spt-repair";
-    ConfigTypes["SCAVCASE"] = "spt-scavcase";
-    ConfigTypes["TRADER"] = "spt-trader";
-    ConfigTypes["WEATHER"] = "spt-weather";
-    ConfigTypes["SEASONAL_EVENT"] = "spt-seasonalevents";
-    ConfigTypes["LOST_ON_DEATH"] = "spt-lostondeath";
-    ConfigTypes["GIFTS"] = "spt-gifts";
-})(ConfigTypes || (ConfigTypes = {}));
+const enums_1 = require("./enums");
 class Helpers {
     logger;
     hashUtil;
@@ -102,12 +73,12 @@ class Helpers {
         this.cloner = container.resolve("PrimaryCloner");
         this.itemHelper = container.resolve("ItemHelper");
         this.sptInventoryHelper = container.resolve("InventoryHelper");
-        this.inRaidConfig = this.configServer.getConfig(ConfigTypes.IN_RAID);
-        this.traderConfig = this.configServer.getConfig(ConfigTypes.TRADER);
-        this.ragfairConfig = this.configServer.getConfig(ConfigTypes.RAGFAIR);
-        this.hideoutConfig = this.configServer.getConfig(ConfigTypes.HIDEOUT);
-        this.locationConfig = this.configServer.getConfig(ConfigTypes.LOCATION);
-        this.pmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
+        this.inRaidConfig = this.configServer.getConfig(enums_1.ConfigTypes.IN_RAID);
+        this.traderConfig = this.configServer.getConfig(enums_1.ConfigTypes.TRADER);
+        this.ragfairConfig = this.configServer.getConfig(enums_1.ConfigTypes.RAGFAIR);
+        this.hideoutConfig = this.configServer.getConfig(enums_1.ConfigTypes.HIDEOUT);
+        this.locationConfig = this.configServer.getConfig(enums_1.ConfigTypes.LOCATION);
+        this.pmcConfig = this.configServer.getConfig(enums_1.ConfigTypes.PMC);
     }
     static get(container) {
         return new Helpers(container);

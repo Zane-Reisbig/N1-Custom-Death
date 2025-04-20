@@ -77,34 +77,6 @@ var QuestStatus;
 class Source {
     static helpers;
     static setPlayerInventoryOnDeath;
-    static getRandomisedArmorRepairDegradationValue(armorMaterial, isRepairKit, armorMax, traderQualityMultipler) {
-        // Degradation value is based on the armor material
-        const armorMaterialSettings = Source.helpers.databaseService.getGlobals().config.ArmorMaterials[armorMaterial];
-        const minMultiplier = isRepairKit
-            ? armorMaterialSettings.MinRepairKitDegradation
-            : armorMaterialSettings.MinRepairDegradation;
-        const maxMultiplier = isRepairKit
-            ? armorMaterialSettings.MaxRepairKitDegradation
-            : armorMaterialSettings.MaxRepairDegradation;
-        const duraLossPercent = Source.helpers.randomUtil.getFloat(minMultiplier, maxMultiplier);
-        const duraLossMultipliedByTraderMultiplier = duraLossPercent * armorMax * traderQualityMultipler;
-        return Number(duraLossMultipliedByTraderMultiplier.toFixed(2));
-    }
-    static getRandomisedWeaponRepairDegradationValue(itemProps, isRepairKit, weaponMax, traderQualityMultipler) {
-        const minRepairDeg = isRepairKit
-            ? itemProps.MinRepairKitDegradation
-            : itemProps.MinRepairDegradation;
-        let maxRepairDeg = isRepairKit
-            ? itemProps.MaxRepairKitDegradation
-            : itemProps.MaxRepairDegradation;
-        // WORKAROUND: Some items are always 0 when repairkit is true
-        if (maxRepairDeg === 0) {
-            maxRepairDeg = itemProps.MaxRepairDegradation;
-        }
-        const duraLossPercent = Source.helpers.randomUtil.getFloat(minRepairDeg, maxRepairDeg);
-        const duraLossMultipliedByTraderMultiplier = duraLossPercent * weaponMax * traderQualityMultipler;
-        return Number(duraLossMultipliedByTraderMultiplier.toFixed(2));
-    }
     applyTraderStandingAdjustments(tradersServerProfile, tradersClientProfile) {
         for (const traderId in tradersClientProfile) {
             const serverProfileTrader = tradersServerProfile[traderId];
@@ -388,13 +360,14 @@ class Source {
         let endRaidPackage = {
             sessionId: sessionId,
             request: request,
+            //@ts-ignore assigned promply
             playerDetails: undefined,
         };
         const fullProfile = Source.helpers.profileHelper.getFullProfile(sessionId);
         const playerStatusDetails = new playerStatusDetails_1.default(endRaidPackage);
+        // playerDetails no longer undefined
         endRaidPackage = { ...endRaidPackage, playerDetails: playerStatusDetails };
         Source.helpers.botLootCacheService.clearCache();
-        Source.helpers.logger.log("Bot Cache Cleared...", "yellow");
         // Reset flea interval time to out-of-raid value
         Source.helpers.ragfairConfig.runIntervalSeconds =
             Source.helpers.ragfairConfig.runIntervalValues.outOfRaid;
@@ -410,10 +383,6 @@ class Source {
             request.locationTransit.sptExitName = request.results.exitName;
             Source.helpers.applicationContext.addValue(ContextVariableType.TRANSIT_INFO, request.locationTransit);
         }
-        else {
-            Source.helpers.logger.log("Player did not transit...", "yellow");
-        }
-        Source.helpers.logger.log(`Player was Scav: ${!playerStatusDetails.isPMC}`, "yellow");
         if (!playerStatusDetails.isPMC) {
             this.handlePostRaidPlayerScav(endRaidPackage, fullProfile.characters.pmc, fullProfile.characters.scav, playerStatusDetails.isDead, playerStatusDetails.isTransfer, request);
             return;
@@ -536,17 +505,14 @@ class Source {
         serverProfile.InsuredItems = insured;
     }
     postRaidPlayerUSEC(sessionId, fullProfile, scavProfile, isDead, isSurvived, isTransfer, request, locationName) {
-        Source.helpers.logger.log("What", "yellow");
         const pmcProfile = fullProfile.characters.pmc;
         const postRaidProfile = request.results.profile;
         const preRaidProfileQuestDataClone = Source.helpers.cloner.clone(pmcProfile.Quests);
-        Source.helpers.logger.log("Handling Post Raid PMC", "yellow");
         // MUST occur BEFORE inventory actions (setInventory()) occur
         // Player died, get quest items they lost for use later
         const lostQuestItems = Source.helpers.profileHelper.getQuestItemsInProfile(postRaidProfile);
         // Update inventory
         this.sptSetInventory(sessionId, pmcProfile, postRaidProfile, isSurvived, isTransfer);
-        Source.helpers.logger.log("Inventory Set", "yellow");
         pmcProfile.Info.Level = postRaidProfile.Info.Level;
         pmcProfile.Skills = postRaidProfile.Skills;
         pmcProfile.Stats.Eft = postRaidProfile.Stats.Eft;
@@ -595,7 +561,6 @@ class Source {
             //            \\
             //            \\
             //            \\
-            Source.helpers.logger.log("Mod Injection site reached", "yellow");
             if (Source.setPlayerInventoryOnDeath) {
                 Source.setPlayerInventoryOnDeath(pmcProfile, sessionId);
                 Source.helpers.logger.success("Raid Had been Patched!");

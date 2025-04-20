@@ -1,4 +1,4 @@
-export declare enum BaseClasses {
+export enum BaseClasses {
     WEAPON = "5422acb9af1c889c16000029",
     UBGL = "55818b014bdc2ddc698b456b",
     ARMOR = "5448e54d4bdc2dcc718b4568",
@@ -109,4 +109,34 @@ export declare enum BaseClasses {
     CHARGING_HANDLE = "55818a6f4bdc2db9688b456b",
     COMB_MUZZLE_DEVICE = "550aa4dd4bdc2dc9348b4569",
     HIDEOUT_AREA_CONTAINER = "63da6da4784a55176c018dba",
+}
+
+export enum ConfigTypes {
+    AIRDROP = "spt-airdrop",
+    BACKUP = "spt-backup",
+    BOT = "spt-bot",
+    PMC = "spt-pmc",
+    CORE = "spt-core",
+    HEALTH = "spt-health",
+    HIDEOUT = "spt-hideout",
+    HTTP = "spt-http",
+    IN_RAID = "spt-inraid",
+    INSURANCE = "spt-insurance",
+    INVENTORY = "spt-inventory",
+    ITEM = "spt-item",
+    LOCALE = "spt-locale",
+    LOCATION = "spt-location",
+    LOOT = "spt-loot",
+    MATCH = "spt-match",
+    PLAYERSCAV = "spt-playerscav",
+    PMC_CHAT_RESPONSE = "spt-pmcchatresponse",
+    QUEST = "spt-quest",
+    RAGFAIR = "spt-ragfair",
+    REPAIR = "spt-repair",
+    SCAVCASE = "spt-scavcase",
+    TRADER = "spt-trader",
+    WEATHER = "spt-weather",
+    SEASONAL_EVENT = "spt-seasonalevents",
+    LOST_ON_DEATH = "spt-lostondeath",
+    GIFTS = "spt-gifts",
 }

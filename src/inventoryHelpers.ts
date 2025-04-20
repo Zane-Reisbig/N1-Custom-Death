@@ -1,6 +1,8 @@
 import { IPmcData } from "@spt/models/eft/common/IPmcData";
 import { IItem, IUpd } from "@spt/models/eft/common/tables/IItem";
 import Helpers from "./helpers";
+import ItemHelpers from "./itemHelpers";
+import { BaseClasses } from "./enums";
 
 export type TSlotId =
     | "ArmBand"
@@ -140,37 +142,21 @@ export class PMCInventory {
         for (const item of allPlayerItems) {
             if (item.slotId?.startsWith("Headwear" as TPlayerSlots)) {
                 this.helmet = item;
-            }
-
-            if (item.slotId?.startsWith("Backpack" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith("Backpack" as TPlayerSlots)) {
                 this.bag = item;
-            }
-
-            if (item.slotId?.startsWith("TacticalVest" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith("TacticalVest" as TPlayerSlots)) {
                 this.tacticalVest = item;
-            }
-
-            if (item.slotId?.startsWith("ArmorVest" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith("ArmorVest" as TPlayerSlots)) {
                 this.armorVest = item;
-            }
-
-            if (item.slotId?.startsWith("Pockets" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith("Pockets" as TPlayerSlots)) {
                 this.pockets = item;
-            }
-
-            if (item.slotId?.startsWith("FirstPrimary" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith("FirstPrimary" as TPlayerSlots)) {
                 this.primary = item;
-            }
-
-            if (item.slotId?.startsWith("SecondPrimary" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith("SecondPrimary" as TPlayerSlots)) {
                 this.secondary = item;
-            }
-
-            if (item.slotId?.startsWith("Holster" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith("Holster" as TPlayerSlots)) {
                 this.holsterWeapon = item;
-            }
-
-            if (item.slotId?.startsWith("SecuredContainer" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith("SecuredContainer" as TPlayerSlots)) {
                 this.container = item;
             }
         }
@@ -186,33 +172,28 @@ export class PMCInventory {
                 .findAndReturnChildrenAsItems(allPlayerItems, this.tacticalVest._id)
                 .slice(1);
 
-            this.tacticalVestItems = allVestItems.filter((i) => {
-                const itemName = helpers.itemHelper.getItemName(i._tpl);
+            this.tacticalVestItems = allVestItems.filter(
+                (i) =>
+                    // Everything that is not an armor plate is our item inventory.
+                    !helpers.itemHelper.isOfBaseclass(i._tpl, BaseClasses.ARMOR_PLATE)
+            );
 
-                // Take out integral inserts and plates
-                return !itemName.includes("plate") && !itemName.includes("insert");
-            });
-
-            this.armorVestPlates = allPlayerItems.filter((i) => {
-                const itemName = helpers.itemHelper.getItemName(i._tpl);
-
-                return (
-                    (itemName.includes("plate") || itemName.includes("insert")) &&
-                    !itemName.includes("plate carrier")
-                );
-            });
+            this.armorVestPlates = allPlayerItems.filter((i) =>
+                // Technically this means that un-equipped plates in your vest
+                //  inventory slots are included in this, but I don't know how you
+                //  would fit a plate in the item slots in there anyway.
+                helpers.itemHelper.isOfBaseclass(i._tpl, BaseClasses.ARMOR_PLATE)
+            );
         }
-
-        // if (this.armorVest) {
-        //     this.armorVestPlates = helpers.itemHelper
-        //         .findAndReturnChildrenAsItems(allPlayerItems, this.armorVest._id)
-        //         .slice(1);
-        // }
 
         if (this.helmet) {
             this.helmetArmorPlates = helpers.itemHelper
                 .findAndReturnChildrenAsItems(allPlayerItems, this.helmet._id)
-                .slice(1);
+                .slice(1)
+                .filter((i) =>
+                    // Don't want nvg's or anything
+                    helpers.itemHelper.isOfBaseclass(i._tpl, BaseClasses.ARMOR_PLATE)
+                );
         }
 
         if (this.pockets) {
@@ -230,7 +211,12 @@ export class PMCInventory {
             helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow")
         );
 
-        helpers.logger.log("Vest items", "yellow");
+        helpers.logger.log("Helmet Plates", "yellow");
+        this.helmetArmorPlates.forEach((i) =>
+            helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow")
+        );
+
+        helpers.logger.log("Vest Items", "yellow");
         this.tacticalVestItems.forEach((i) =>
             helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow")
         );
@@ -250,6 +236,48 @@ export class PMCInventory {
 
 export default class InventoryHelpers {
     public static helpers: Helpers;
+
+    public static removeFIRFromInventory(inventory: IItem[]) {
+        const dbItems = InventoryHelpers.helpers.databaseService.getItems();
+        const itemsToRemovePropertyFrom = inventory.filter(
+            (item) =>
+                // Has upd object + upd.SpawnedInSession property + not a quest item
+                item.upd?.SpawnedInSession && !dbItems[item._tpl]._props.QuestItem
+        );
+
+        for (const item of itemsToRemovePropertyFrom) {
+            if (item.upd) {
+                item.upd.SpawnedInSession = false;
+            }
+        }
+    }
+
+    public static selectPercentageOfItemsFromInventory(
+        src: IItem[],
+        percentage: { min: number; max: number }
+    ) {
+        const selections: IItem[] = [];
+
+        const pAsDecimal =
+            InventoryHelpers.helpers.randomUtil.randInt(
+                percentage.min,
+                percentage.max + 1
+            ) / 100;
+
+        InventoryHelpers.helpers.logger.log(
+            `Taking "${Math.floor(pAsDecimal * 100)}%" of "${src.length}" items"`,
+            "yellow"
+        );
+
+        let itemsToTake = Math.floor(src.length * pAsDecimal);
+
+        while (itemsToTake > 0) {
+            selections.push(InventoryHelpers.helpers.randomUtil.getArrayValue(src));
+            itemsToTake--;
+        }
+
+        return selections;
+    }
 
     public static dumpInventory(inventory?: IItem[], label?: string, color?: string) {
         if (inventory == null) {

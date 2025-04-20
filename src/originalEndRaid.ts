@@ -1,51 +1,11 @@
-import { LocationLifecycleService } from "@spt/services/LocationLifecycleService";
-import { ILogger } from "@spt/models/spt/utils/ILogger";
-import { SaveServer } from "@spt/servers/SaveServer";
-import { IPreSptLoadModAsync } from "@spt/models/external/IPreSptLoadModAsync";
-import { HashUtil } from "@spt/utils/HashUtil";
-import { TimeUtil } from "@spt/utils/TimeUtil";
 import { IEndLocalRaidRequestData } from "@spt/models/eft/match/IEndLocalRaidRequestData";
-import { RandomUtil } from "@spt/utils/RandomUtil";
-import { ProfileHelper } from "@spt/helpers/ProfileHelper";
-import { InRaidHelper } from "@spt/helpers/InRaidHelper";
-import { HealthHelper } from "@spt/helpers/HealthHelper";
-import { QuestHelper } from "@spt/helpers/QuestHelper";
-import { RewardHelper } from "@spt/helpers/RewardHelper";
-import { MatchBotDetailsCacheService } from "@spt/services/MatchBotDetailsCacheService";
-import { PmcChatResponseService } from "@spt/services/PmcChatResponseService";
-import { PlayerScavGenerator } from "@spt/generators/PlayerScavGenerator";
-import { TraderHelper } from "@spt/helpers/TraderHelper";
-import { LocalisationService } from "@spt/services/LocalisationService";
-import { InsuranceService } from "@spt/services/InsuranceService";
-import { BotLootCacheService } from "@spt/services/BotLootCacheService";
-import { ConfigServer } from "@spt/servers/ConfigServer";
-import { BotGenerationCacheService } from "@spt/services/BotGenerationCacheService";
-import { MailSendService } from "@spt/services/MailSendService";
-import { RaidTimeAdjustmentService } from "@spt/services/RaidTimeAdjustmentService";
-import { BotNameService } from "@spt/services/BotNameService";
-import { LootGenerator } from "@spt/generators/LootGenerator";
-import { ApplicationContext } from "@spt/context/ApplicationContext";
-import { LocationLootGenerator } from "@spt/generators/LocationLootGenerator";
-import { PmcWaveGenerator } from "@spt/generators/PmcWaveGenerator";
-import { ICloner } from "@spt/utils/cloners/ICloner";
-import { DatabaseService } from "@spt/services/DatabaseService";
-import { IInRaidConfig } from "@spt/models/spt/config/IInRaidConfig";
-import { ITraderConfig } from "@spt/models/spt/config/ITraderConfig";
-import { IRagfairConfig } from "@spt/models/spt/config/IRagfairConfig";
-import { IHideoutConfig } from "@spt/models/spt/config/IHideoutConfig";
-import { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
-import { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import { IItem } from "@spt/models/eft/common/tables/IItem";
-import { ILocation } from "@spt/models/eft/common/ILocation";
 import { IPmcData } from "@spt/models/eft/common/IPmcData";
 import { IQuestStatus, ITraderInfo } from "@spt/models/eft/common/tables/IBotBase";
 import { ISptProfile } from "@spt/models/eft/profile/ISptProfile";
 import PlayerStatusDetails from "./playerStatusDetails";
 import Helpers from "./helpers";
-import InventoryHelpers, { PMCInventory } from "./inventoryHelpers";
 import ItemTransferHelper from "./itemTransferHelper";
-import { IProps } from "@spt/models/eft/common/tables/ITemplateItem";
-import { IArmorMaterials } from "@spt/models/eft/common/IGlobals";
 
 export interface SessionDetails {
     sessionId: string;
@@ -128,63 +88,6 @@ export default class Source {
         playerPMC: IPmcData,
         sessionID: string
     ) => void;
-
-    public static getRandomisedArmorRepairDegradationValue(
-        armorMaterial: string,
-        isRepairKit: boolean,
-        armorMax: number,
-        traderQualityMultipler: number
-    ): number {
-        // Degradation value is based on the armor material
-        const armorMaterialSettings =
-            Source.helpers.databaseService.getGlobals().config.ArmorMaterials[
-                armorMaterial as keyof IArmorMaterials
-            ];
-
-        const minMultiplier = isRepairKit
-            ? armorMaterialSettings.MinRepairKitDegradation
-            : armorMaterialSettings.MinRepairDegradation;
-
-        const maxMultiplier = isRepairKit
-            ? armorMaterialSettings.MaxRepairKitDegradation
-            : armorMaterialSettings.MaxRepairDegradation;
-
-        const duraLossPercent = Source.helpers.randomUtil.getFloat(
-            minMultiplier,
-            maxMultiplier
-        );
-        const duraLossMultipliedByTraderMultiplier =
-            duraLossPercent * armorMax * traderQualityMultipler;
-
-        return Number(duraLossMultipliedByTraderMultiplier.toFixed(2));
-    }
-    public static getRandomisedWeaponRepairDegradationValue(
-        itemProps: IProps,
-        isRepairKit: boolean,
-        weaponMax: number,
-        traderQualityMultipler: number
-    ): number {
-        const minRepairDeg = isRepairKit
-            ? itemProps.MinRepairKitDegradation
-            : itemProps.MinRepairDegradation;
-        let maxRepairDeg = isRepairKit
-            ? itemProps.MaxRepairKitDegradation
-            : itemProps.MaxRepairDegradation;
-
-        // WORKAROUND: Some items are always 0 when repairkit is true
-        if (maxRepairDeg === 0) {
-            maxRepairDeg = itemProps.MaxRepairDegradation;
-        }
-
-        const duraLossPercent = Source.helpers.randomUtil.getFloat(
-            minRepairDeg!,
-            maxRepairDeg!
-        );
-        const duraLossMultipliedByTraderMultiplier =
-            duraLossPercent * weaponMax * traderQualityMultipler;
-
-        return Number(duraLossMultipliedByTraderMultiplier.toFixed(2));
-    }
 
     applyTraderStandingAdjustments(
         tradersServerProfile: Record<string, ITraderInfo>,
@@ -666,7 +569,7 @@ export default class Source {
         // Send message from fence giving player reward generated above
         Source.helpers.mailSendService.sendLocalisedNpcMessageToPlayer(
             sessionId,
-            Source.helpers.traderHelper.getTraderById(Traders.FENCE),
+            Source.helpers.traderHelper.getTraderById(Traders.FENCE as string),
             MessageType.MESSAGE_WITH_ITEMS,
             Source.helpers.randomUtil.getArrayValue(
                 Source.helpers.traderConfig.fence.coopExtractGift.messageLocaleIds
@@ -683,19 +586,21 @@ export default class Source {
 
         Source.helpers.logger.log("Raid Has ended...", "yellow");
 
-        let endRaidPackage = {
+        let endRaidPackage: SessionDetails = {
             sessionId: sessionId,
             request: request,
+
+            //@ts-ignore assigned promply
             playerDetails: undefined,
         };
 
         const fullProfile = Source.helpers.profileHelper.getFullProfile(sessionId);
-
         const playerStatusDetails = new PlayerStatusDetails(endRaidPackage);
+
+        // playerDetails no longer undefined
         endRaidPackage = { ...endRaidPackage, playerDetails: playerStatusDetails };
 
         Source.helpers.botLootCacheService.clearCache();
-        Source.helpers.logger.log("Bot Cache Cleared...", "yellow");
 
         // Reset flea interval time to out-of-raid value
         Source.helpers.ragfairConfig.runIntervalSeconds =
@@ -716,14 +621,8 @@ export default class Source {
                 ContextVariableType.TRANSIT_INFO,
                 request.locationTransit
             );
-        } else {
-            Source.helpers.logger.log("Player did not transit...", "yellow");
         }
 
-        Source.helpers.logger.log(
-            `Player was Scav: ${!playerStatusDetails.isPMC}`,
-            "yellow"
-        );
         if (!playerStatusDetails.isPMC) {
             this.handlePostRaidPlayerScav(
                 endRaidPackage,
@@ -957,15 +856,11 @@ export default class Source {
         request: IEndLocalRaidRequestData,
         locationName: string
     ): void {
-        Source.helpers.logger.log("What", "yellow");
-
         const pmcProfile = fullProfile.characters.pmc;
         const postRaidProfile = request.results.profile;
         const preRaidProfileQuestDataClone = Source.helpers.cloner.clone(
             pmcProfile.Quests
         );
-
-        Source.helpers.logger.log("Handling Post Raid PMC", "yellow");
 
         // MUST occur BEFORE inventory actions (setInventory()) occur
         // Player died, get quest items they lost for use later
@@ -980,8 +875,6 @@ export default class Source {
             isSurvived,
             isTransfer
         );
-
-        Source.helpers.logger.log("Inventory Set", "yellow");
 
         pmcProfile.Info.Level = postRaidProfile.Info.Level;
         pmcProfile.Skills = postRaidProfile.Skills;
@@ -1074,7 +967,6 @@ export default class Source {
             //            \\
             //            \\
 
-            Source.helpers.logger.log("Mod Injection site reached", "yellow");
             if (Source.setPlayerInventoryOnDeath) {
                 Source.setPlayerInventoryOnDeath(pmcProfile, sessionId);
 
