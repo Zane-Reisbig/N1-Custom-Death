@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "allowJs": true,
+        "module": "NodeNext",
+        "target": "ES2022",
+        "moduleResolution": "NodeNext",
+        "esModuleInterop": true,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "resolveJsonModule": true,
+        "outDir": "out",
+        "paths": {
+            "@spt/*": ["./types/*"]
+        }
+    },
+    "exclude": ["node_modules", "dist", "out", "build.mjs", "ignore"]
+}

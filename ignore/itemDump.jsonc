@@ -1,0 +1,482 @@
+[
+    {
+        "Slot ID": "SecuredContainer",
+        "ID": "6800a25fe2e8fd5e54033afb",
+        "Location": "undefined",
+        "TPL": "676008db84e242067d0dc4c9",
+        "Cannon Name": "Secure container Kappa (Desecrated)"
+    },
+    {
+        "Slot ID": "Headwear",
+        "ID": "6800a282e2e8fd5e54033bf2",
+        "Location": "undefined",
+        "TPL": "5a7c4850e899ef00150be885",
+        "Cannon Name": "6B47 Ratnik-BSh helmet (Olive Drab)"
+    },
+    {
+        "Slot ID": "Holster",
+        "ID": "6800a29ee2e8fd5e54033bf8",
+        "Location": "undefined",
+        "TPL": "5abccb7dd8ce87001773e277",
+        "Cannon Name": "Stechkin APB 9x18PM silenced machine pistol"
+    },
+    {
+        "Slot ID": "TacticalVest",
+        "ID": "6800a295e2e8fd5e54033bf7",
+        "Location": "undefined",
+        "TPL": "6034cf5fffd42c541047f72e",
+        "Cannon Name": "Umka M33-SET1 hunter vest (Olive Drab)"
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "676db384777490e23c45b657",
+        "Location": "undefined",
+        "TPL": "673c7b00cbf4b984b5099181",
+        "Cannon Name": ""
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "66c5bfd48a24042f1006eadc",
+        "Location": "undefined",
+        "TPL": "66740c3739b9da6ce402ee65",
+        "Cannon Name": ""
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "5d494a295b56502f18c98a08",
+        "Location": "undefined",
+        "TPL": "6542435ea57eea37ed6562f0",
+        "Cannon Name": ""
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "640b2d867f4185aa520d08ba",
+        "Location": "undefined",
+        "TPL": "64381b6e44b37a080d0245b9",
+        "Cannon Name": "WeaponStand_Stash_3"
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "63db64cbf9963741dc0d741f",
+        "Location": "undefined",
+        "TPL": "64381b6e44b37a080d0245b9",
+        "Cannon Name": "WeaponStand_Stash_3"
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "5fe49444ae6628187a2e78b8",
+        "Location": "undefined",
+        "TPL": "5811ce772459770e9e5f9532",
+        "Cannon Name": "Stash"
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "5fe49444ae6628187a2e78ba",
+        "Location": "undefined",
+        "TPL": "5963866b86f7747bfa1c4462",
+        "Cannon Name": "Stash"
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "60dca3da42ad9b706b369aca",
+        "Location": "undefined",
+        "TPL": "602543c13fee350cd564d032",
+        "Cannon Name": ""
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "6800a25fe2e8fd5e54033afd",
+        "Location": "undefined",
+        "TPL": "5963866b86f7747bfa1c4462",
+        "Cannon Name": "Stash"
+    },
+    {
+        "Slot ID": "hideout",
+        "ID": "6800a25fe2e8fd5e54033afe",
+        "Location": "[object Object]",
+        "TPL": "5449016a4bdc2d6f028b456f",
+        "Cannon Name": "Roubles"
+    },
+    {
+        "Slot ID": "hideout",
+        "ID": "6800a25fe2e8fd5e54033aff",
+        "Location": "[object Object]",
+        "TPL": "569668774bdc2da2298b4568",
+        "Cannon Name": "Euros"
+    },
+    {
+        "Slot ID": "hideout",
+        "ID": "6800a25fe2e8fd5e54033b00",
+        "Location": "[object Object]",
+        "TPL": "5696686a4bdc2da3298b456a",
+        "Cannon Name": "Dollars"
+    },
+    {
+        "Slot ID": "hideout",
+        "ID": "6800a25fe2e8fd5e54033b01",
+        "Location": "[object Object]",
+        "TPL": "58ac60eb86f77401897560ff",
+        "Cannon Name": "Balaclava_dev"
+    },
+    {
+        "Slot ID": "hideout",
+        "ID": "6800a25fe2e8fd5e54033b02",
+        "Location": "[object Object]",
+        "TPL": "62e910aaf957f2915e0a5e36",
+        "Cannon Name": "Digital secure DSP radio transmitter"
+    },
+    {
+        "Slot ID": "hideout",
+        "ID": "6800a25fe2e8fd5e54033b03",
+        "Location": "[object Object]",
+        "TPL": "62e910aaf957f2915e0a5e36",
+        "Cannon Name": "Digital secure DSP radio transmitter"
+    },
+    {
+        "Slot ID": "hideout",
+        "ID": "6800a25fe2e8fd5e54033b04",
+        "Location": "[object Object]",
+        "TPL": "5d235b4d86f7742e017bc88a",
+        "Cannon Name": "GP coin"
+    },
+    {
+        "Slot ID": "hideout",
+        "ID": "6800a25fe2e8fd5e54033b05",
+        "Location": "[object Object]",
+        "TPL": "5d1b36a186f7742523398433",
+        "Cannon Name": "Metal fuel tank"
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "6800a25fe2e8fd5e54033afa",
+        "Location": "undefined",
+        "TPL": "55d7217a4bdc2d86028b456d",
+        "Cannon Name": "Default Inventory"
+    },
+    {
+        "Slot ID": "mod_magazine",
+        "ID": "6800a29ee2e8fd5e54033bfa",
+        "Location": "undefined",
+        "TPL": "5a17fb03fcdbcbcae668728f",
+        "Cannon Name": "APS 9x18PM 20-round magazine"
+    },
+    {
+        "Slot ID": "mod_stock",
+        "ID": "6800a29ee2e8fd5e54033bfb",
+        "Location": "undefined",
+        "TPL": "5a17fb9dfcdbcbcae6687291",
+        "Cannon Name": "APB detachable wire stock"
+    },
+    {
+        "Slot ID": "mod_pistol_grip",
+        "ID": "6800a29ee2e8fd5e54033bfc",
+        "Location": "undefined",
+        "TPL": "5a17fc70fcdbcb0176308b3d",
+        "Cannon Name": "APS bakelite side-pieces"
+    },
+    {
+        "Slot ID": "mod_sight_front",
+        "ID": "6800a29ee2e8fd5e54033bfd",
+        "Location": "undefined",
+        "TPL": "5aba62f8d8ce87001943946b",
+        "Cannon Name": "APS front sight"
+    },
+    {
+        "Slot ID": "mod_sight_rear",
+        "ID": "6800a29ee2e8fd5e54033bfe",
+        "Location": "undefined",
+        "TPL": "5aba639ed8ce8700182ece67",
+        "Cannon Name": "APB rear sight"
+    },
+    {
+        "Slot ID": "mod_muzzle",
+        "ID": "6800a29ee2e8fd5e54033bff",
+        "Location": "undefined",
+        "TPL": "5abcc328d8ce8700194394f3",
+        "Cannon Name": "APB 9x18PM sound suppressor"
+    },
+    {
+        "Slot ID": "Helmet_top",
+        "ID": "6800a282e2e8fd5e54033bf4",
+        "Location": "undefined",
+        "TPL": "657baaf0b7e9ca9a02045c02",
+        "Cannon Name": "Layers of aramid fiber"
+    },
+    {
+        "Slot ID": "Helmet_back",
+        "ID": "6800a282e2e8fd5e54033bf5",
+        "Location": "undefined",
+        "TPL": "657bab6ec6f689d3a205b85f",
+        "Cannon Name": "Layers of aramid fiber"
+    },
+    {
+        "Slot ID": "Helmet_ears",
+        "ID": "6800a282e2e8fd5e54033bf6",
+        "Location": "undefined",
+        "TPL": "657babc6f58ba5a6250107a2",
+        "Cannon Name": "Layers of aramid fiber"
+    },
+    {
+        "Slot ID": "4",
+        "ID": "6800a2a401001b8f74c8af80",
+        "Location": "[object Object]",
+        "TPL": "5449016a4bdc2d6f028b456f",
+        "Cannon Name": "Roubles"
+    },
+    {
+        "Slot ID": "main",
+        "ID": "6800a2aa01001b8f745ccc05",
+        "Location": "[object Object]",
+        "TPL": "5d235b4d86f7742e017bc88a",
+        "Cannon Name": "GP coin"
+    },
+    {
+        "Slot ID": "Front_plate",
+        "ID": "6800a27ce2e8fd5e54033bee",
+        "Location": "undefined",
+        "TPL": "656f664200d62bcd2e024077",
+        "Cannon Name": "Korund-VM ballistic plates (Front)"
+    },
+    {
+        "Slot ID": "Back_plate",
+        "ID": "6800a27ce2e8fd5e54033bf1",
+        "Location": "undefined",
+        "TPL": "657b2797c3dbcb01d60c35ea",
+        "Cannon Name": "Korund-VM ballistic plate (Back)"
+    },
+    {
+        "Slot ID": "Left_side_plate",
+        "ID": "6800a27ce2e8fd5e54033bef",
+        "Location": "undefined",
+        "TPL": "654a4f8bc721968a4404ef18",
+        "Cannon Name": "Korund-VM ballistic plate (Side)"
+    },
+    {
+        "Slot ID": "Right_side_plate",
+        "ID": "6800a27ce2e8fd5e54033bf0",
+        "Location": "undefined",
+        "TPL": "654a4f8bc721968a4404ef18",
+        "Cannon Name": "Korund-VM ballistic plate (Side)"
+    },
+    {
+        "Slot ID": "Soft_armor_front",
+        "ID": "6800a27ce2e8fd5e54033be7",
+        "Location": "undefined",
+        "TPL": "65731b46cea9255e2102360a",
+        "Cannon Name": "Aramid insert"
+    },
+    {
+        "Slot ID": "Soft_armor_back",
+        "ID": "6800a27ce2e8fd5e54033be8",
+        "Location": "undefined",
+        "TPL": "65731b4fcea9255e2102360e",
+        "Cannon Name": "Aramid insert"
+    },
+    {
+        "Slot ID": "Soft_armor_left",
+        "ID": "6800a27ce2e8fd5e54033be9",
+        "Location": "undefined",
+        "TPL": "65731b576e709cddd001ec3f",
+        "Cannon Name": "Aramid insert"
+    },
+    {
+        "Slot ID": "soft_armor_right",
+        "ID": "6800a27ce2e8fd5e54033bea",
+        "Location": "undefined",
+        "TPL": "65731b60ff6dc44a7d068c4a",
+        "Cannon Name": "Aramid insert"
+    },
+    {
+        "Slot ID": "Collar",
+        "ID": "6800a27ce2e8fd5e54033beb",
+        "Location": "undefined",
+        "TPL": "65731b666e709cddd001ec43",
+        "Cannon Name": "Aramid insert"
+    },
+    {
+        "Slot ID": "Groin",
+        "ID": "6800a27ce2e8fd5e54033bec",
+        "Location": "undefined",
+        "TPL": "65731b716e709cddd001ec47",
+        "Cannon Name": "Aramid insert"
+    },
+    {
+        "Slot ID": "Groin_back",
+        "ID": "6800a27ce2e8fd5e54033bed",
+        "Location": "undefined",
+        "TPL": "65731b6b6042b0f210020ef6",
+        "Cannon Name": "Aramid insert"
+    },
+    {
+        "Slot ID": "Dogtag",
+        "ID": "67471938bafff850080488b7",
+        "Location": "undefined",
+        "TPL": "6662e9f37fa79a6d83730fa0",
+        "Cannon Name": "Dogtag USEC"
+    },
+    {
+        "Slot ID": "undefined",
+        "ID": "5fe49444ae6628187a2e78b9",
+        "Location": "undefined",
+        "TPL": "5963866286f7747bf429b572",
+        "Cannon Name": "Stash"
+    },
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ///////////////////////      Player Inventory    ///////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
+    // {
+    // "Slot ID": "3",
+    // "ID": "680199d9dab9542cec034b3a",
+    // "Location": "[object Object]",
+    // "TPL": "55d4887d4bdc2d962f8b4570",
+    // "Cannon Name": "AR-15 5.56x45 Colt STANAG 30-round magazine"
+    // },
+    // {
+    // "Slot ID": "cartridges",
+    // "ID": "680199d9dab9542cec034b52",
+    // "Location": "0",
+    // "TPL": "54527a984bdc2d4e668b4567",
+    // "Cannon Name": "5.56x45mm M855"
+    // },
+
+    {
+        "Slot ID": "main",
+        "ID": "680199d9dab9542cec034b7e",
+        "Location": "[object Object]",
+        "TPL": "5e831507ea0a7c419c2f9bd9",
+        "Cannon Name": "Esmarch tourniquet"
+    },
+
+    {
+        "Slot ID": "main",
+        "ID": "680199d9dab9542cec034b3e",
+        "Location": "[object Object]",
+        "TPL": "5448fee04bdc2dbc018b4567",
+        "Cannon Name": "Bottle of water (0.6L)"
+    },
+
+    {
+        "Slot ID": "main",
+        "ID": "680199d9dab9542cec034b3f",
+        "Location": "[object Object]",
+        "TPL": "590c5f0d86f77413997acfab",
+        "Cannon Name": "MRE ration pack"
+    },
+
+    {
+        "Slot ID": "main",
+        "ID": "680199d9dab9542cec034b40",
+        "Location": "[object Object]",
+        "TPL": "54527a984bdc2d4e668b4567",
+        "Cannon Name": "5.56x45mm M855"
+    },
+
+    {
+        "Slot ID": "main",
+        "ID": "680199d9dab9542cec034b7d",
+        "Location": "[object Object]",
+        "TPL": "544fb25a4bdc2dfb738b4567",
+        "Cannon Name": "Aseptic bandage"
+    },
+
+    {
+        "Slot ID": "main",
+        "ID": "680199d9dab9542cec034b55",
+        "Location": "[object Object]",
+        "TPL": "544fb25a4bdc2dfb738b4567",
+        "Cannon Name": "Aseptic bandage"
+    },
+
+    {
+        "Slot ID": "main",
+        "ID": "680199d9dab9542cec034bc4",
+        "Location": "[object Object]",
+        "TPL": "5af0454c86f7746bf20992e8",
+        "Cannon Name": "Aluminum splint"
+    },
+
+    {
+        "Slot ID": "Soft_armor_front",
+        "ID": "680199d9dab9542cec034b42",
+        "Location": "undefined",
+        "TPL": "65703d866584602f7d057a8a",
+        "Cannon Name": "Aramid insert"
+    },
+
+    {
+        "Slot ID": "Soft_armor_back",
+        "ID": "680199d9dab9542cec034b43",
+        "Location": "undefined",
+        "TPL": "65703fa06584602f7d057a8e",
+        "Cannon Name": "Aramid insert"
+    },
+
+    {
+        "Slot ID": "Soft_armor_left",
+        "ID": "680199d9dab9542cec034b44",
+        "Location": "undefined",
+        "TPL": "65703fe46a912c8b5c03468b",
+        "Cannon Name": "Aramid insert"
+    },
+
+    {
+        "Slot ID": "soft_armor_right",
+        "ID": "680199d9dab9542cec034b45",
+        "Location": "undefined",
+        "TPL": "657040374e67e8ec7a0d261c",
+        "Cannon Name": "Aramid insert"
+    },
+
+    {
+        "Slot ID": "pocket1",
+        "ID": "680199d9dab9542cec034b47",
+        "Location": "[object Object]",
+        "TPL": "544fb3364bdc2d34748b456a",
+        "Cannon Name": "Immobilizing splint"
+    },
+
+    {
+        "Slot ID": "pocket2",
+        "ID": "680199d9dab9542cec034b48",
+        "Location": "[object Object]",
+        "TPL": "544fb37f4bdc2dee738b4567",
+        "Cannon Name": "Analgin painkillers"
+    },
+
+    {
+        "Slot ID": "pocket3",
+        "ID": "680199d9dab9542cec034b49",
+        "Location": "[object Object]",
+        "TPL": "5751a25924597722c463c472",
+        "Cannon Name": "Army bandage"
+    },
+
+    {
+        "Slot ID": "Earpiece",
+        "ID": "680199d9dab9542cec034b4a",
+        "Location": "undefined",
+        "TPL": "5645bcc04bdc2d363b8b4572",
+        "Cannon Name": "Peltor ComTac II headset (OD Green)"
+    },
+
+    {
+        "Slot ID": "Dogtag",
+        "ID": "6747193f170146228c0d2226",
+        "Location": "undefined",
+        "TPL": "6662ea05f6259762c56f3189",
+        "Cannon Name": "Dogtag USEC"
+    },
+
+    {
+        "Slot ID": "undefined",
+        "ID": "664115f68b8ae85875060b3a",
+        "Location": "undefined",
+        "TPL": "5963866286f7747bf429b572",
+        "Cannon Name": "Stash"
+    }
+]
