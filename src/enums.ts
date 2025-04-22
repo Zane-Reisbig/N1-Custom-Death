@@ -140,3 +140,24 @@ export enum ConfigTypes {
     LOST_ON_DEATH = "spt-lostondeath",
     GIFTS = "spt-gifts",
 }
+
+export enum EquipmentSlots {
+    HEADWEAR = "Headwear",
+    EARPIECE = "Earpiece",
+    FACE_COVER = "FaceCover",
+    ARMOR_VEST = "ArmorVest",
+    EYEWEAR = "Eyewear",
+    ARM_BAND = "ArmBand",
+    TACTICAL_VEST = "TacticalVest",
+    POCKETS = "Pockets",
+    BACKPACK = "Backpack",
+    SECURED_CONTAINER = "SecuredContainer",
+    FIRST_PRIMARY_WEAPON = "FirstPrimaryWeapon",
+    SECOND_PRIMARY_WEAPON = "SecondPrimaryWeapon",
+    HOLSTER = "Holster",
+    SCABBARD = "Scabbard",
+}
+
+export enum OtherSlots {
+    CARTRIDGE = "cartridges",
+}

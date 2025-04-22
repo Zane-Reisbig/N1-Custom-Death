@@ -24,152 +24,75 @@ class Mod implements IPreSptLoadMod {
     private static doDurabilityChange(playerInv: PMCInventory) {
         // This sucks
 
-        // Helmet Before
+        const allItems = Mod.helpers.databaseService.getItems();
 
+        // Helmet Before
         if (playerInv.helmet) {
             for (const plate of playerInv.helmetArmorPlates) {
-                Mod.helpers.logger.log(
-                    `Helmet Plate Durability: ${
-                        plate.upd!.Repairable?.Durability
-                    }\nMax Percent: ${plate.upd!.Repairable?.MaxDurability}`,
-                    "yellow"
-                );
-
                 plate.upd &&
                     plate.upd.Repairable &&
                     ItemHelpers.changeDurabiltityByPercentage(
                         plate,
-                        Mod.helpers.databaseService.getItems()[plate._tpl],
+                        allItems[plate._tpl],
                         config.DurabilityLossPercentages.Vest,
                         { isArmor: true }
                     );
-
-                Mod.helpers.logger.log(
-                    `Helmet Plate Durability: ${
-                        plate.upd!.Repairable?.Durability
-                    }\nMax Percent: ${plate.upd!.Repairable?.MaxDurability}`,
-                    "red"
-                );
             }
         } else {
             Mod.helpers.logger.log("No Helmet to damage", "green");
         }
-
         // Helmet After
 
         // Vest Before
-
         if (playerInv.armorVest || playerInv.tacticalVest) {
             for (const plate of playerInv.armorVestPlates) {
-                Mod.helpers.logger.log(
-                    `Vest Plate Durability: ${
-                        plate.upd!.Repairable?.Durability
-                    }\nMax Percent: ${plate.upd!.Repairable?.MaxDurability}`,
-                    "yellow"
-                );
-
                 plate.upd &&
                     ItemHelpers.changeDurabiltityByPercentage(
                         plate,
-                        Mod.helpers.databaseService.getItems()[plate._tpl],
+                        allItems[plate._tpl],
                         config.DurabilityLossPercentages.Vest,
                         { isArmor: true }
                     );
-
-                Mod.helpers.logger.log(
-                    `Vest Plate Durability: ${
-                        plate.upd!.Repairable?.Durability
-                    }\nMax Percent: ${plate.upd!.Repairable?.MaxDurability}`,
-                    "red"
-                );
             }
         } else {
             Mod.helpers.logger.log("No Vest Or Rig Plates To damage", "green");
         }
-
         // Vest After
 
         // Primary Before
-
         if (playerInv.primary) {
-            Mod.helpers.logger.log(
-                `First Primary Dura Percent: ${
-                    playerInv.primary.upd!.Repairable?.Durability
-                }\nMax Percent: ${playerInv.primary.upd!.Repairable?.MaxDurability}`,
-                "yellow"
-            );
-
             ItemHelpers.changeDurabiltityByPercentage(
                 playerInv.primary,
-                Mod.helpers.databaseService.getItems()[playerInv.primary._tpl],
+                allItems[playerInv.primary._tpl],
                 config.DurabilityLossPercentages.PrimaryWeapon
-            );
-
-            Mod.helpers.logger.log(
-                `First Primary Dura Percent: ${
-                    playerInv.primary.upd!.Repairable?.Durability
-                }\nMax Percent: ${playerInv.primary.upd!.Repairable?.MaxDurability}`,
-                "red"
             );
         } else {
             Mod.helpers.logger.log("No Primay to damage", "green");
         }
-
         // Primary After
 
         // Secondary Before
-
         if (playerInv.secondary) {
-            Mod.helpers.logger.log(
-                `Second Primary Dura Percent: ${
-                    playerInv.secondary.upd!.Repairable?.Durability
-                }\nMax Percent: ${playerInv.secondary.upd!.Repairable?.MaxDurability}`,
-                "yellow"
-            );
-
             ItemHelpers.changeDurabiltityByPercentage(
                 playerInv.secondary,
-                Mod.helpers.databaseService.getItems()[playerInv.secondary._tpl],
+                allItems[playerInv.secondary._tpl],
                 config.DurabilityLossPercentages.SecondaryWeapon
-            );
-
-            Mod.helpers.logger.log(
-                `Second Primary Dura Percent: ${
-                    playerInv.secondary.upd!.Repairable?.Durability
-                }\nMax Percent: ${playerInv.secondary.upd!.Repairable?.MaxDurability}`,
-                "red"
             );
         } else {
             Mod.helpers.logger.log("No Secondary to damage", "green");
         }
-
         // Secondary After
 
         // Holster Before
-
         if (playerInv.holsterWeapon) {
-            Mod.helpers.logger.log(
-                `Holster Weapon Dura Percent: ${
-                    playerInv.holsterWeapon.upd!.Repairable?.Durability
-                }\nMax Percent: ${playerInv.holsterWeapon.upd!.Repairable?.MaxDurability}`,
-                "yellow"
-            );
             ItemHelpers.changeDurabiltityByPercentage(
                 playerInv.holsterWeapon,
-                Mod.helpers.databaseService.getItems()[playerInv.holsterWeapon._tpl],
+                allItems[playerInv.holsterWeapon._tpl],
                 config.DurabilityLossPercentages.HolsterWeapon
-            );
-
-            Mod.helpers.logger.log(
-                `Holster Weapon Dura Percent: ${
-                    playerInv.holsterWeapon.upd!.Repairable?.Durability
-                }\nMax Percent: ${playerInv.holsterWeapon.upd!.Repairable?.MaxDurability}`,
-                "red"
             );
         } else {
             Mod.helpers.logger.log("No Holster Weapon to damage", "green");
         }
-
         // Holster After
     }
 
@@ -250,7 +173,6 @@ class Mod implements IPreSptLoadMod {
 
         const playerInv = new PMCInventory(playerData, Mod.helpers);
 
-        Mod.helpers.logger.log(`Running FIR Change - `, "red");
         Mod.doFIRChange(playerInv);
 
         Mod.helpers.logger.log(
@@ -292,7 +214,7 @@ class Mod implements IPreSptLoadMod {
         // This is the actual mod, the rest of this mess is the re-implementation
         //  of the LocationLifeCycleService, starting at the public method "endLocalRaid"
         //
-        // This hooks in after the "postRaidPMC" function from the original spt/server
+        // This hooks in after the "postRaidPMC" function from the original "spt/server"
         Source.setPlayerInventoryOnDeath = Mod.setInventory;
 
         // This is the hook from the tutorial!

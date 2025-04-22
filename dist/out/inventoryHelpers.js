@@ -27,50 +27,56 @@ class PMCInventory {
         this.helmetArmorPlates = [];
         const allPlayerItems = helpers.itemHelper.findAndReturnChildrenAsItems(pmcData.Inventory.items, pmcData.Inventory.equipment);
         for (const item of allPlayerItems) {
-            if (item.slotId?.startsWith("Headwear")) {
+            if (item.slotId?.startsWith(enums_1.EquipmentSlots.HEADWEAR)) {
                 this.helmet = item;
             }
-            else if (item.slotId?.startsWith("Backpack")) {
+            else if (item.slotId?.startsWith(enums_1.EquipmentSlots.BACKPACK)) {
                 this.bag = item;
             }
-            else if (item.slotId?.startsWith("TacticalVest")) {
+            else if (item.slotId?.startsWith(enums_1.EquipmentSlots.TACTICAL_VEST)) {
                 this.tacticalVest = item;
             }
-            else if (item.slotId?.startsWith("ArmorVest")) {
+            else if (item.slotId?.startsWith(enums_1.EquipmentSlots.ARMOR_VEST)) {
                 this.armorVest = item;
             }
-            else if (item.slotId?.startsWith("Pockets")) {
+            else if (item.slotId?.startsWith(enums_1.EquipmentSlots.POCKETS)) {
                 this.pockets = item;
             }
-            else if (item.slotId?.startsWith("FirstPrimary")) {
+            else if (item.slotId?.startsWith(enums_1.EquipmentSlots.FIRST_PRIMARY_WEAPON)) {
                 this.primary = item;
             }
-            else if (item.slotId?.startsWith("SecondPrimary")) {
+            else if (item.slotId?.startsWith(enums_1.EquipmentSlots.SECOND_PRIMARY_WEAPON)) {
                 this.secondary = item;
             }
-            else if (item.slotId?.startsWith("Holster")) {
+            else if (item.slotId?.startsWith(enums_1.EquipmentSlots.HOLSTER)) {
                 this.holsterWeapon = item;
             }
-            else if (item.slotId?.startsWith("SecuredContainer")) {
+            else if (item.slotId?.startsWith(enums_1.EquipmentSlots.SECURED_CONTAINER)) {
                 this.container = item;
             }
         }
         if (this.bag) {
             this.bagItems = helpers.itemHelper
                 .findAndReturnChildrenAsItems(allPlayerItems, this.bag._id)
-                .slice(1);
+                .slice(1)
+                // Only direct children of the bag, not mods of bag items
+                .filter((i) => i.parentId === this.bag._id);
         }
         if (this.tacticalVest) {
             const allVestItems = helpers.itemHelper
                 .findAndReturnChildrenAsItems(allPlayerItems, this.tacticalVest._id)
                 .slice(1);
             this.tacticalVestItems = allVestItems.filter((i) => 
-            // Everything that is not an armor plate is our item inventory.
-            !helpers.itemHelper.isOfBaseclass(i._tpl, enums_1.BaseClasses.ARMOR_PLATE));
+            // Everything that is not an armor plate is our item inventory or ammo or cartridge slot
+            !helpers.itemHelper.isOfBaseclass(i._tpl, enums_1.BaseClasses.ARMOR_PLATE) &&
+                !helpers.itemHelper.isOfBaseclass(i._tpl, enums_1.BaseClasses.AMMO) &&
+                !i.slotId?.startsWith(enums_1.OtherSlots.CARTRIDGE) &&
+                // Only direct children as well
+                i.parentId === this.tacticalVest._id);
             this.armorVestPlates = allPlayerItems.filter((i) => 
             // Technically this means that un-equipped plates in your vest
-            //  inventory slots are included in this, but I don't know how you
-            //  would fit a plate in the item slots in there anyway.
+            //  are included in this, but I don't know how you
+            //  would fit a plate in there in there anyway.
             helpers.itemHelper.isOfBaseclass(i._tpl, enums_1.BaseClasses.ARMOR_PLATE));
         }
         if (this.helmet) {
@@ -84,7 +90,8 @@ class PMCInventory {
         if (this.pockets) {
             this.pocketItems = helpers.itemHelper
                 .findAndReturnChildrenAsItems(allPlayerItems, this.pockets._id)
-                .slice(1);
+                .slice(1)
+                .filter((i) => i.parentId === this.pockets._id);
         }
         this.containerItems = helpers.itemHelper
             .findAndReturnChildrenAsItems(allPlayerItems, this.container._id)
@@ -95,6 +102,8 @@ class PMCInventory {
         this.helmetArmorPlates.forEach((i) => helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow"));
         helpers.logger.log("Vest Items", "yellow");
         this.tacticalVestItems.forEach((i) => helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow"));
+        helpers.logger.log("Bag Items", "yellow");
+        this.bagItems.forEach((i) => helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow"));
     }
     dump() {
         // prettier-ignore

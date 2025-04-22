@@ -5,6 +5,9 @@ class ItemHelpers {
     static isFoundInRaid(item) {
         return item.upd && item.upd.SpawnedInSession;
     }
+    static isRepairable(item) {
+        return item.upd && item.upd.Repairable;
+    }
     static getRandomisedArmorRepairDegradationValue(armorMaterial, isRepairKit, armorMax, traderQualityMultipler) {
         // Degradation value is based on the armor material
         const armorMaterialSettings = ItemHelpers.helpers.databaseService.getGlobals().config.ArmorMaterials[armorMaterial];
@@ -33,24 +36,61 @@ class ItemHelpers {
         const duraLossMultipliedByTraderMultiplier = duraLossPercent * weaponMax * traderQualityMultipler;
         return Number(duraLossMultipliedByTraderMultiplier.toFixed(2));
     }
+    /**
+     * @param src - [OriginalValue, NewValue, Label?]
+     */
+    static dumpChangeInValue(src) {
+        for (const index of src) {
+            if (index.length === 3) {
+                ItemHelpers.helpers.logger.log(`${index[2]}`, "yellow");
+            }
+            ItemHelpers.helpers.logger.log(`Change: ${index[0]} -> ${index[1]} = ${index[0] - index[1]}`, "yellow");
+        }
+    }
+    static dumpDurability(src) {
+        if (!ItemHelpers.isRepairable(src)) {
+            ItemHelpers.helpers.logger.error(`Item "${ItemHelpers.helpers.itemHelper.getItemName(src._tpl)}" does not have durability!`);
+            return;
+        }
+        ItemHelpers.dumpDurabilityUPD(src.upd.Repairable);
+    }
+    static dumpDurabilityUPD(upd) {
+        ItemHelpers.helpers.logger.log(`
+Current Durability: ${upd.Durability}
+Max Durability: ${upd.MaxDurability}
+`, "yellow");
+    }
+    static dumpDurabilityChange(oldDurability, newDurability) {
+        ItemHelpers.helpers.logger.log(`Old - `, "yellow");
+        ItemHelpers.dumpDurabilityUPD(oldDurability);
+        ItemHelpers.helpers.logger.log(`New - `, "yellow");
+        ItemHelpers.dumpDurabilityUPD(newDurability);
+        ItemHelpers.helpers.logger.log(`Change - `, "yellow");
+        // V - The second line is 92 characters, 1 over what I allow on wrap - V
+        // prettier-ignore
+        ItemHelpers.dumpChangeInValue([
+            [oldDurability.Durability, newDurability.Durability, "Current Durability - "],
+            [oldDurability.MaxDurability, newDurability.MaxDurability, "Max Durability - "],
+        ]);
+    }
     static changeDurabiltityByPercentage(src, srcDetails, percentage, options) {
-        if (src.upd == null || src.upd.Repairable == null) {
-            ItemHelpers.helpers.logger.error(`Request Dura Change for ${ItemHelpers.helpers.itemHelper.getItemName(src._tpl)} invalid!`);
+        const itemName = ItemHelpers.helpers.itemHelper.getItemName(src._tpl);
+        if (!ItemHelpers.isRepairable(src)) {
+            ItemHelpers.helpers.logger.error(`Request Dura Change for ${itemName} invalid!`);
             return;
         }
         const itemMaxDurability = ItemHelpers.helpers.cloner.clone(src.upd.Repairable.MaxDurability);
         const itemCurrentDurability = ItemHelpers.helpers.cloner.clone(src.upd.Repairable.Durability);
         const itemCurrentMaxDurability = ItemHelpers.helpers.cloner.clone(src.upd.Repairable.MaxDurability);
         const randPercentage = ItemHelpers.helpers.randomUtil.getInt(percentage.min, percentage.max);
-        // Same with Max Durability
         let newCurrentMaxDurability = itemCurrentMaxDurability - (randPercentage / 100) * itemMaxDurability;
         // Ensure new max isnt above items max
         if (newCurrentMaxDurability > itemMaxDurability) {
             newCurrentMaxDurability = itemMaxDurability;
         }
         // Then take a percentage of that
-        // Take percentage of total durability, not current
-        let newCurrentDurability = itemCurrentMaxDurability - (randPercentage / 100) * itemCurrentDurability;
+        // Take percentage of new total durability, not current
+        let newCurrentDurability = newCurrentMaxDurability - (randPercentage / 100) * itemCurrentDurability;
         // Ensure new current isnt above items max
         if (newCurrentDurability > itemMaxDurability) {
             newCurrentDurability = itemMaxDurability;
@@ -70,6 +110,19 @@ class ItemHelpers {
         if (src.upd.Repairable.Durability > src.upd.Repairable.MaxDurability) {
             src.upd.Repairable.Durability = src.upd.Repairable.MaxDurability;
         }
+        ItemHelpers.dumpChangeInValue([
+            [
+                itemMaxDurability,
+                newCurrentMaxDurability,
+                `Max Durability For: ${itemName}`,
+            ],
+            [
+                itemCurrentDurability,
+                newCurrentDurability,
+                `Current Durability For: ${itemName}`,
+            ],
+        ]);
+        ItemHelpers.helpers.logger.log("\n", "white");
     }
 }
 exports.default = ItemHelpers;

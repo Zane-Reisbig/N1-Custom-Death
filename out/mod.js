@@ -53,14 +53,13 @@ class Mod {
     }
     static doDurabilityChange(playerInv) {
         // This sucks
+        const allItems = Mod.helpers.databaseService.getItems();
         // Helmet Before
         if (playerInv.helmet) {
             for (const plate of playerInv.helmetArmorPlates) {
-                Mod.helpers.logger.log(`Helmet Plate Durability: ${plate.upd.Repairable?.Durability}\nMax Percent: ${plate.upd.Repairable?.MaxDurability}`, "yellow");
                 plate.upd &&
                     plate.upd.Repairable &&
-                    itemHelpers_1.default.changeDurabiltityByPercentage(plate, Mod.helpers.databaseService.getItems()[plate._tpl], config.DurabilityLossPercentages.Vest, { isArmor: true });
-                Mod.helpers.logger.log(`Helmet Plate Durability: ${plate.upd.Repairable?.Durability}\nMax Percent: ${plate.upd.Repairable?.MaxDurability}`, "red");
+                    itemHelpers_1.default.changeDurabiltityByPercentage(plate, allItems[plate._tpl], config.DurabilityLossPercentages.Vest, { isArmor: true });
             }
         }
         else {
@@ -70,10 +69,8 @@ class Mod {
         // Vest Before
         if (playerInv.armorVest || playerInv.tacticalVest) {
             for (const plate of playerInv.armorVestPlates) {
-                Mod.helpers.logger.log(`Vest Plate Durability: ${plate.upd.Repairable?.Durability}\nMax Percent: ${plate.upd.Repairable?.MaxDurability}`, "yellow");
                 plate.upd &&
-                    itemHelpers_1.default.changeDurabiltityByPercentage(plate, Mod.helpers.databaseService.getItems()[plate._tpl], config.DurabilityLossPercentages.Vest, { isArmor: true });
-                Mod.helpers.logger.log(`Vest Plate Durability: ${plate.upd.Repairable?.Durability}\nMax Percent: ${plate.upd.Repairable?.MaxDurability}`, "red");
+                    itemHelpers_1.default.changeDurabiltityByPercentage(plate, allItems[plate._tpl], config.DurabilityLossPercentages.Vest, { isArmor: true });
             }
         }
         else {
@@ -82,9 +79,7 @@ class Mod {
         // Vest After
         // Primary Before
         if (playerInv.primary) {
-            Mod.helpers.logger.log(`First Primary Dura Percent: ${playerInv.primary.upd.Repairable?.Durability}\nMax Percent: ${playerInv.primary.upd.Repairable?.MaxDurability}`, "yellow");
-            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.primary, Mod.helpers.databaseService.getItems()[playerInv.primary._tpl], config.DurabilityLossPercentages.PrimaryWeapon);
-            Mod.helpers.logger.log(`First Primary Dura Percent: ${playerInv.primary.upd.Repairable?.Durability}\nMax Percent: ${playerInv.primary.upd.Repairable?.MaxDurability}`, "red");
+            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.primary, allItems[playerInv.primary._tpl], config.DurabilityLossPercentages.PrimaryWeapon);
         }
         else {
             Mod.helpers.logger.log("No Primay to damage", "green");
@@ -92,9 +87,7 @@ class Mod {
         // Primary After
         // Secondary Before
         if (playerInv.secondary) {
-            Mod.helpers.logger.log(`Second Primary Dura Percent: ${playerInv.secondary.upd.Repairable?.Durability}\nMax Percent: ${playerInv.secondary.upd.Repairable?.MaxDurability}`, "yellow");
-            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.secondary, Mod.helpers.databaseService.getItems()[playerInv.secondary._tpl], config.DurabilityLossPercentages.SecondaryWeapon);
-            Mod.helpers.logger.log(`Second Primary Dura Percent: ${playerInv.secondary.upd.Repairable?.Durability}\nMax Percent: ${playerInv.secondary.upd.Repairable?.MaxDurability}`, "red");
+            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.secondary, allItems[playerInv.secondary._tpl], config.DurabilityLossPercentages.SecondaryWeapon);
         }
         else {
             Mod.helpers.logger.log("No Secondary to damage", "green");
@@ -102,9 +95,7 @@ class Mod {
         // Secondary After
         // Holster Before
         if (playerInv.holsterWeapon) {
-            Mod.helpers.logger.log(`Holster Weapon Dura Percent: ${playerInv.holsterWeapon.upd.Repairable?.Durability}\nMax Percent: ${playerInv.holsterWeapon.upd.Repairable?.MaxDurability}`, "yellow");
-            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.holsterWeapon, Mod.helpers.databaseService.getItems()[playerInv.holsterWeapon._tpl], config.DurabilityLossPercentages.HolsterWeapon);
-            Mod.helpers.logger.log(`Holster Weapon Dura Percent: ${playerInv.holsterWeapon.upd.Repairable?.Durability}\nMax Percent: ${playerInv.holsterWeapon.upd.Repairable?.MaxDurability}`, "red");
+            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.holsterWeapon, allItems[playerInv.holsterWeapon._tpl], config.DurabilityLossPercentages.HolsterWeapon);
         }
         else {
             Mod.helpers.logger.log("No Holster Weapon to damage", "green");
@@ -161,7 +152,6 @@ class Mod {
     static setInventory(playerData, sessionID) {
         Mod.helpers.logger.log("We are setting the inventory on death!", "green");
         const playerInv = new inventoryHelpers_1.PMCInventory(playerData, Mod.helpers);
-        Mod.helpers.logger.log(`Running FIR Change - `, "red");
         Mod.doFIRChange(playerInv);
         Mod.helpers.logger.log(`Removing Items: ${config.DoRandomItemLossOnDeath}`, config.DoRandomItemLossOnDeath ? "red" : "green");
         if (config.DoRandomItemLossOnDeath) {
@@ -190,7 +180,7 @@ class Mod {
         // This is the actual mod, the rest of this mess is the re-implementation
         //  of the LocationLifeCycleService, starting at the public method "endLocalRaid"
         //
-        // This hooks in after the "postRaidPMC" function from the original spt/server
+        // This hooks in after the "postRaidPMC" function from the original "spt/server"
         originalEndRaid_1.default.setPlayerInventoryOnDeath = Mod.setInventory;
         // This is the hook from the tutorial!
         // Woo-Hooo!!

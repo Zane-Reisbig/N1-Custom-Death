@@ -7,8 +7,8 @@
     },
     "DoDurabilityLoss": true,
     "DurabilityLossPercentages": {
-        "Helmet": { "min": 10, "max": 20 },
-        "Vest": { "min": 20, "max": 30 },
+        "Helmet": { "min": 5, "max": 10 },
+        "Vest": { "min": 5, "max": 10 },
         "PrimaryWeapon": { "min": 15, "max": 25 },
         "SecondaryWeapon": { "min": 10, "max": 25 },
         "HolsterWeapon": { "min": 10, "max": 25 }

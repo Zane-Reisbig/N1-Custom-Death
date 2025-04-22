@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfigTypes = exports.BaseClasses = void 0;
+exports.OtherSlots = exports.EquipmentSlots = exports.ConfigTypes = exports.BaseClasses = void 0;
 var BaseClasses;
 (function (BaseClasses) {
     BaseClasses["WEAPON"] = "5422acb9af1c889c16000029";
@@ -144,3 +144,24 @@ var ConfigTypes;
     ConfigTypes["LOST_ON_DEATH"] = "spt-lostondeath";
     ConfigTypes["GIFTS"] = "spt-gifts";
 })(ConfigTypes || (exports.ConfigTypes = ConfigTypes = {}));
+var EquipmentSlots;
+(function (EquipmentSlots) {
+    EquipmentSlots["HEADWEAR"] = "Headwear";
+    EquipmentSlots["EARPIECE"] = "Earpiece";
+    EquipmentSlots["FACE_COVER"] = "FaceCover";
+    EquipmentSlots["ARMOR_VEST"] = "ArmorVest";
+    EquipmentSlots["EYEWEAR"] = "Eyewear";
+    EquipmentSlots["ARM_BAND"] = "ArmBand";
+    EquipmentSlots["TACTICAL_VEST"] = "TacticalVest";
+    EquipmentSlots["POCKETS"] = "Pockets";
+    EquipmentSlots["BACKPACK"] = "Backpack";
+    EquipmentSlots["SECURED_CONTAINER"] = "SecuredContainer";
+    EquipmentSlots["FIRST_PRIMARY_WEAPON"] = "FirstPrimaryWeapon";
+    EquipmentSlots["SECOND_PRIMARY_WEAPON"] = "SecondPrimaryWeapon";
+    EquipmentSlots["HOLSTER"] = "Holster";
+    EquipmentSlots["SCABBARD"] = "Scabbard";
+})(EquipmentSlots || (exports.EquipmentSlots = EquipmentSlots = {}));
+var OtherSlots;
+(function (OtherSlots) {
+    OtherSlots["CARTRIDGE"] = "cartridges";
+})(OtherSlots || (exports.OtherSlots = OtherSlots = {}));

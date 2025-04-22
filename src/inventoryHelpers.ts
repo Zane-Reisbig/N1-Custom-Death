@@ -2,106 +2,7 @@ import { IPmcData } from "@spt/models/eft/common/IPmcData";
 import { IItem, IUpd } from "@spt/models/eft/common/tables/IItem";
 import Helpers from "./helpers";
 import ItemHelpers from "./itemHelpers";
-import { BaseClasses } from "./enums";
-
-export type TSlotId =
-    | "ArmBand"
-    | "ArmorVest"
-    | "Backpack"
-    | "Earpiece"
-    | "Eyewear"
-    | "FaceCover"
-    | "FirstPrimaryWeapon"
-    | "Headwear"
-    | "Holster"
-    | "pocket1"
-    | "pocket2"
-    | "pocket3"
-    | "Scabbard"
-    | "SecondPrimaryWeapon"
-    | "SecuredContainer"
-    | "TacticalVest"
-    | "back_plate"
-    | "front_plate"
-    | "left_side_plate"
-    | "right_side_plate"
-    | "mod_barrel"
-    | "mod_bipod"
-    | "mod_catch"
-    | "mod_charge"
-    | "mod_equipment"
-    | "mod_equipment_000"
-    | "mod_equipment_001"
-    | "mod_equipment_002"
-    | "mod_flashlight"
-    | "mod_foregrip"
-    | "mod_gas_block"
-    | "mod_hammer"
-    | "mod_handguard"
-    | "mod_launcher"
-    | "mod_magazine"
-    | "mod_mount"
-    | "mod_mount_000"
-    | "mod_mount_001"
-    | "mod_mount_002"
-    | "mod_mount_003"
-    | "mod_mount_004"
-    | "mod_mount_005"
-    | "mod_mount_006"
-    | "mod_muzzle"
-    | "mod_muzzle_000"
-    | "mod_muzzle_001"
-    | "mod_pistol_grip"
-    | "mod_pistol_grip_akms"
-    | "mod_pistolgrip"
-    | "mod_pistolgrip_000"
-    | "mod_reciever"
-    | "mod_scope"
-    | "mod_scope_000"
-    | "mod_scope_001"
-    | "mod_scope_002"
-    | "mod_scope_003"
-    | "mod_sight_front"
-    | "mod_sight_rear"
-    | "mod_stock"
-    | "mod_stock_000"
-    | "mod_stock_001"
-    | "mod_stock_002"
-    | "mod_stock_akms"
-    | "mod_stock_axis"
-    | "mod_tactical"
-    | "mod_tactical001"
-    | "mod_tactical002"
-    | "mod_tactical_000"
-    | "mod_tactical_001"
-    | "mod_tactical_002"
-    | "mod_tactical_003"
-    | "mod_tactical_2"
-    | "mod_trigger"
-    | "mod_nvg"
-    | "hideout";
-
-export type TPlayerSlots =
-    | "FaceCover"
-    | "Headwear"
-    | "Helmet"
-    | "Eyewear"
-    | "TacticalVest"
-    | "ArmorVest"
-    | "back_plate"
-    | "front_plate"
-    | "left_side_plate"
-    | "right_side_plate"
-    | "main" // Backpack
-    | "pocket" // All pockets
-    | "pocket1"
-    | "pocket2"
-    | "pocket3"
-    | "FirstPrimaryWeapon"
-    | "SecondPrimaryWeapon"
-    | "Holster"
-    | "SecuredContainer"
-    | "Scabbard";
+import { BaseClasses, EquipmentSlots, OtherSlots } from "./enums";
 
 export class PMCInventory {
     helmet?: IItem;
@@ -140,23 +41,23 @@ export class PMCInventory {
         );
 
         for (const item of allPlayerItems) {
-            if (item.slotId?.startsWith("Headwear" as TPlayerSlots)) {
+            if (item.slotId?.startsWith(EquipmentSlots.HEADWEAR)) {
                 this.helmet = item;
-            } else if (item.slotId?.startsWith("Backpack" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith(EquipmentSlots.BACKPACK)) {
                 this.bag = item;
-            } else if (item.slotId?.startsWith("TacticalVest" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith(EquipmentSlots.TACTICAL_VEST)) {
                 this.tacticalVest = item;
-            } else if (item.slotId?.startsWith("ArmorVest" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith(EquipmentSlots.ARMOR_VEST)) {
                 this.armorVest = item;
-            } else if (item.slotId?.startsWith("Pockets" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith(EquipmentSlots.POCKETS)) {
                 this.pockets = item;
-            } else if (item.slotId?.startsWith("FirstPrimary" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith(EquipmentSlots.FIRST_PRIMARY_WEAPON)) {
                 this.primary = item;
-            } else if (item.slotId?.startsWith("SecondPrimary" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith(EquipmentSlots.SECOND_PRIMARY_WEAPON)) {
                 this.secondary = item;
-            } else if (item.slotId?.startsWith("Holster" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith(EquipmentSlots.HOLSTER)) {
                 this.holsterWeapon = item;
-            } else if (item.slotId?.startsWith("SecuredContainer" as TPlayerSlots)) {
+            } else if (item.slotId?.startsWith(EquipmentSlots.SECURED_CONTAINER)) {
                 this.container = item;
             }
         }
@@ -164,7 +65,9 @@ export class PMCInventory {
         if (this.bag) {
             this.bagItems = helpers.itemHelper
                 .findAndReturnChildrenAsItems(allPlayerItems, this.bag._id)
-                .slice(1);
+                .slice(1)
+                // Only direct children of the bag, not mods of bag items
+                .filter((i) => i.parentId === this.bag!._id);
         }
 
         if (this.tacticalVest) {
@@ -174,14 +77,18 @@ export class PMCInventory {
 
             this.tacticalVestItems = allVestItems.filter(
                 (i) =>
-                    // Everything that is not an armor plate is our item inventory.
-                    !helpers.itemHelper.isOfBaseclass(i._tpl, BaseClasses.ARMOR_PLATE)
+                    // Everything that is not an armor plate is our item inventory or ammo or cartridge slot
+                    !helpers.itemHelper.isOfBaseclass(i._tpl, BaseClasses.ARMOR_PLATE) &&
+                    !helpers.itemHelper.isOfBaseclass(i._tpl, BaseClasses.AMMO) &&
+                    !i.slotId?.startsWith(OtherSlots.CARTRIDGE) &&
+                    // Only direct children as well
+                    i.parentId === this.tacticalVest!._id
             );
 
             this.armorVestPlates = allPlayerItems.filter((i) =>
                 // Technically this means that un-equipped plates in your vest
-                //  inventory slots are included in this, but I don't know how you
-                //  would fit a plate in the item slots in there anyway.
+                //  are included in this, but I don't know how you
+                //  would fit a plate in there in there anyway.
                 helpers.itemHelper.isOfBaseclass(i._tpl, BaseClasses.ARMOR_PLATE)
             );
         }
@@ -199,7 +106,8 @@ export class PMCInventory {
         if (this.pockets) {
             this.pocketItems = helpers.itemHelper
                 .findAndReturnChildrenAsItems(allPlayerItems, this.pockets._id)
-                .slice(1);
+                .slice(1)
+                .filter((i) => i.parentId === this.pockets!._id);
         }
 
         this.containerItems = helpers.itemHelper
@@ -218,6 +126,11 @@ export class PMCInventory {
 
         helpers.logger.log("Vest Items", "yellow");
         this.tacticalVestItems.forEach((i) =>
+            helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow")
+        );
+
+        helpers.logger.log("Bag Items", "yellow");
+        this.bagItems.forEach((i) =>
             helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow")
         );
     }
