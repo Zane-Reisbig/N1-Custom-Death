@@ -1,10 +1,9 @@
-import { LocationLifecycleService } from "@spt/services/LocationLifecycleService";
+import { ConfigTypes } from "../Definitions/enums";
+
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { SaveServer } from "@spt/servers/SaveServer";
-import { IPreSptLoadModAsync } from "@spt/models/external/IPreSptLoadModAsync";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { TimeUtil } from "@spt/utils/TimeUtil";
-import { IEndLocalRaidRequestData } from "@spt/models/eft/match/IEndLocalRaidRequestData";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { InRaidHelper } from "@spt/helpers/InRaidHelper";
@@ -35,19 +34,17 @@ import { IRagfairConfig } from "@spt/models/spt/config/IRagfairConfig";
 import { IHideoutConfig } from "@spt/models/spt/config/IHideoutConfig";
 import { ILocationConfig } from "@spt/models/spt/config/ILocationConfig";
 import { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
-import { IItem } from "@spt/models/eft/common/tables/IItem";
-import { ILocation } from "@spt/models/eft/common/ILocation";
-import { IPmcData } from "@spt/models/eft/common/IPmcData";
-import { IQuestStatus, ITraderInfo } from "@spt/models/eft/common/tables/IBotBase";
-import { ISptProfile } from "@spt/models/eft/profile/ISptProfile";
 import { DependencyContainer } from "tsyringe";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { InventoryHelper } from "@spt/helpers/InventoryHelper";
-import { JsonUtil } from "@spt/utils/JsonUtil";
-import { FileSystem } from "@spt/utils/FileSystem";
-import { ConfigTypes } from "./enums";
+import { BotGenerator } from "@spt/generators/BotGenerator";
+import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
+import { BotHelper } from "@spt/helpers/BotHelper";
+import { FenceService } from "@spt/services/FenceService";
 
 export default class Helpers {
+    private static self: Helpers;
+
     logger: ILogger;
     hashUtil: HashUtil;
     saveServer: SaveServer;
@@ -83,7 +80,11 @@ export default class Helpers {
     locationConfig: ILocationConfig;
     itemHelper: ItemHelper;
     sptInventoryHelper: InventoryHelper;
+    botHelper: BotHelper;
+    botGenerator: BotGenerator;
+    botGeneratorHelper: BotGeneratorHelper;
     pmcConfig: IPmcConfig;
+    fenceService: FenceService;
 
     private constructor(container: DependencyContainer) {
         this.logger = container.resolve<ILogger>("PrimaryLogger");
@@ -130,6 +131,10 @@ export default class Helpers {
         this.cloner = container.resolve<ICloner>("PrimaryCloner");
         this.itemHelper = container.resolve<ItemHelper>("ItemHelper");
         this.sptInventoryHelper = container.resolve<InventoryHelper>("InventoryHelper");
+        this.botHelper = container.resolve<BotHelper>("BotHelper");
+        this.botGenerator = container.resolve<BotGenerator>("BotGenerator");
+        this.botGeneratorHelper =
+            container.resolve<BotGeneratorHelper>("BotGeneratorHelper");
 
         this.inRaidConfig = this.configServer.getConfig(ConfigTypes.IN_RAID);
         this.traderConfig = this.configServer.getConfig(ConfigTypes.TRADER);
@@ -137,9 +142,26 @@ export default class Helpers {
         this.hideoutConfig = this.configServer.getConfig(ConfigTypes.HIDEOUT);
         this.locationConfig = this.configServer.getConfig(ConfigTypes.LOCATION);
         this.pmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
+        this.fenceService = container.resolve<FenceService>("FenceService");
     }
 
     public static get(container: DependencyContainer) {
-        return new Helpers(container);
+        if (Helpers.self == null) {
+            Helpers.self = new Helpers(container);
+        }
+
+        return Helpers.self;
+    }
+
+    public static randInt(range: { min: number; max: number }) {
+        return Helpers.self.randomUtil.randInt(range.min, range.max + 1);
+    }
+
+    public static randFloat(range: { min: number; max: number }) {
+        return Helpers.self.randomUtil.getFloat(range.min, range.max + 1);
+    }
+
+    public static getRandomPercentage(src: number, range: { min: number; max: number }) {
+        return Helpers.randFloat(range) * src;
     }
 }

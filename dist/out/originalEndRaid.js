@@ -355,7 +355,6 @@ class Source {
         Source.helpers.mailSendService.sendLocalisedNpcMessageToPlayer(sessionId, Source.helpers.traderHelper.getTraderById(Traders.FENCE), MessageType.MESSAGE_WITH_ITEMS, Source.helpers.randomUtil.getArrayValue(Source.helpers.traderConfig.fence.coopExtractGift.messageLocaleIds), mailableLoot, Source.helpers.timeUtil.getHoursAsSeconds(Source.helpers.traderConfig.fence.coopExtractGift.giftExpiryHours));
     }
     endLocalRaid(sessionId, request) {
-        Source.validateMembers(this);
         Source.helpers.logger.log("Raid Has ended...", "yellow");
         let endRaidPackage = {
             sessionId: sessionId,

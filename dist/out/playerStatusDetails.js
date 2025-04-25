@@ -26,7 +26,7 @@ class PlayerStatusDetails {
         this.mapBase = PlayerStatusDetails.helpers.databaseService.getLocation(this.locationName);
         this.isPMC = tokens[1].toLowerCase() === "pmc";
         // prettier-ignore
-        this.isDead = [ExitStatus.KILLED, ExitStatus.LEFT, ExitStatus.RUNNER]
+        this.isDead = [ExitStatus.KILLED, ExitStatus.LEFT]
             .includes(details.request.results.result);
         this.isTransfer = details.request.results.result === ExitStatus.TRANSIT;
         this.isSurvived = details.request.results.result === ExitStatus.SURVIVED;

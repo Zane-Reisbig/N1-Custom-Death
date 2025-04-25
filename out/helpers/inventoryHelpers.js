@@ -5,8 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PMCInventory = void 0;
 const itemHelpers_1 = __importDefault(require("./itemHelpers"));
-const enums_1 = require("./enums");
+const enums_1 = require("../Definitions/enums");
 class PMCInventory {
+    everythingElse;
     helmet;
     helmetArmorPlates;
     bag;
@@ -17,7 +18,7 @@ class PMCInventory {
     armorVestPlates;
     primary;
     secondary;
-    holsterWeapon;
+    holster;
     pockets;
     pocketItems;
     container;
@@ -30,6 +31,7 @@ class PMCInventory {
         this.armorVestPlates = [];
         this.helmetArmorPlates = [];
         const allPlayerItems = helpers.itemHelper.findAndReturnChildrenAsItems(pmcData.Inventory.items, pmcData.Inventory.equipment);
+        this.everythingElse = pmcData.Inventory.items.filter((i) => i.parentId !== pmcData.Inventory.equipment);
         for (const item of allPlayerItems) {
             if (item.slotId?.startsWith(enums_1.EquipmentSlots.HEADWEAR)) {
                 this.helmet = item;
@@ -60,7 +62,7 @@ class PMCInventory {
                 continue;
             }
             else if (item.slotId?.startsWith(enums_1.EquipmentSlots.HOLSTER)) {
-                this.holsterWeapon = item;
+                this.holster = item;
                 continue;
             }
             else if (item.slotId?.startsWith(enums_1.EquipmentSlots.SECURED_CONTAINER)) {
@@ -127,7 +129,18 @@ class PMCInventory {
         //     helpers.logger.log(helpers.itemHelper.getItemName(i._tpl), "yellow")
         // );
     }
-    dump() {
+    asList() {
+        return [
+            ...[this.helmet, ...this.helmetArmorPlates],
+            ...[this.tacticalVest, ...this.tacticalVestItems],
+            ...[this.armorVest, ...this.armorVestPlates],
+            ...[this.bag, ...this.bagItems],
+            ...[this.pockets, ...this.pocketItems],
+            ...[this.container, ...this.containerItems],
+            ...this.everythingElse,
+        ].filter((i) => i != null);
+    }
+    dumpItemLogs() {
         this.helmet &&
             InventoryHelpers.dumpInventory(this.helmetArmorPlates, "Helmet Plates");
         this.tacticalVest &&
@@ -143,6 +156,42 @@ class PMCInventory {
 exports.PMCInventory = PMCInventory;
 class InventoryHelpers {
     static helpers;
+    static extractItemAndContents(slotID, inventory) {
+        let item;
+        const contents = [];
+        for (const subItem of inventory) {
+            if (subItem.slotId !== slotID)
+                continue;
+            item = subItem;
+        }
+        if (item == null) {
+            InventoryHelpers.helpers.logger.log("LINE 208 INVENTORY HELPERS IS FUCKED!!!!");
+            return [null, null];
+        }
+        for (const subItem of inventory) {
+            if (subItem.parentId !== item._id)
+                continue;
+            contents.push(subItem);
+        }
+        return [item, contents];
+    }
+    static clonePMCInv(pmcData) {
+        return InventoryHelpers.helpers.cloner.clone(pmcData.Inventory.items);
+    }
+    static refreshItemIDsFromInventory(inventory) {
+        const copy = [...inventory];
+        let translationTable = {};
+        copy.forEach((i) => {
+            translationTable[i._id] = InventoryHelpers.helpers.hashUtil.generate();
+            i._id = translationTable[i._id];
+        });
+        copy.forEach((i) => {
+            if (!i.parentId)
+                return;
+            i.parentId = translationTable[i.parentId];
+        });
+        return copy;
+    }
     static removeFIRFromInventory(inventory) {
         const dbItems = InventoryHelpers.helpers.databaseService.getItems();
         const itemsToRemovePropertyFrom = inventory.filter((item) => 

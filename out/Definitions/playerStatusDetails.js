@@ -1,14 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ExitStatus;
-(function (ExitStatus) {
-    ExitStatus["KILLED"] = "Killed";
-    ExitStatus["LEFT"] = "Left";
-    ExitStatus["MISSINGINACTION"] = "MissingInAction";
-    ExitStatus["RUNNER"] = "Runner";
-    ExitStatus["SURVIVED"] = "Survived";
-    ExitStatus["TRANSIT"] = "Transit";
-})(ExitStatus || (ExitStatus = {}));
+const enums_1 = require("./enums");
 class PlayerStatusDetails {
     static helpers;
     serverID;
@@ -26,10 +18,10 @@ class PlayerStatusDetails {
         this.mapBase = PlayerStatusDetails.helpers.databaseService.getLocation(this.locationName);
         this.isPMC = tokens[1].toLowerCase() === "pmc";
         // prettier-ignore
-        this.isDead = [ExitStatus.KILLED, ExitStatus.LEFT]
+        this.isDead = [enums_1.ExitStatus.KILLED, enums_1.ExitStatus.LEFT]
             .includes(details.request.results.result);
-        this.isTransfer = details.request.results.result === ExitStatus.TRANSIT;
-        this.isSurvived = details.request.results.result === ExitStatus.SURVIVED;
+        this.isTransfer = details.request.results.result === enums_1.ExitStatus.TRANSIT;
+        this.isSurvived = details.request.results.result === enums_1.ExitStatus.SURVIVED;
     }
 }
 exports.default = PlayerStatusDetails;

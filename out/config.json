@@ -1,28 +1,51 @@
 {
-    "DoRandomItemLossOnDeath": true,
-    "ItemLossPercentages": {
-        "bag": { "min": 20, "max": 50 },
-        "vest": { "min": 0, "max": 20 },
-        "pocket": { "min": 20, "max": 100 }
+    "Behavior": {
+        "DoRandomItemLossOnDeath": {
+            "Comment": "Lose a percentage of items on death - ENABLED BY DEFAULT",
+            "Comment_PS": "Only one behavior will be active at a time, 'DoRandomItemLossOnDeath' comes first *- ",
+            "Comment_PS_PS": "-* in da' code so if it is enabled it will over-write any other behavor options",
+            "Enabled": true,
+            "ItemLossPercentages": {
+                "Bag": { "min": 20, "max": 50 },
+                "Vest": { "min": 0, "max": 20 },
+                "Pocket": { "min": 20, "max": 100 }
+            },
+            "DoDurabilityLoss": true,
+            "DurabilityLossPercentages": {
+                "Helmet": { "min": 5, "max": 10 },
+                "Vest": { "min": 5, "max": 10 },
+                "PrimaryWeapon": { "min": 15, "max": 25 },
+                "SecondaryWeapon": { "min": 10, "max": 25 },
+                "HolsterWeapon": { "min": 10, "max": 25 }
+            },
+            "RemoveFIR": {
+                "SecureContainerItems": false,
+                "Helmet": true,
+                "Backpack": true,
+                "BackpackItems": true,
+                "Vest": true,
+                "VestItems": true,
+                "PocketItems": true,
+                "PrimaryWeapon": true,
+                "SecondaryWeapon": true,
+                "HolsterWeapon": true
+            }
+        },
+        "ResetToPreRaidInventory": {
+            "Comment": "Inventory reset to pre-raid, no item loss or degradation, health damage *-",
+            "Comment_PS": "-* rep, stats, normal after raid stuff stays",
+            "Enabled": false,
+            "SecureContainerBehavior": {
+                "Comment": "Remove FIR status and reset items in your SecureContainer, disabled by default",
+                "ResetItems": false,
+                "RemoveFIR": false
+            }
+        }
     },
-    "DoDurabilityLoss": true,
-    "DurabilityLossPercentages": {
-        "Helmet": { "min": 5, "max": 10 },
-        "Vest": { "min": 5, "max": 10 },
-        "PrimaryWeapon": { "min": 15, "max": 25 },
-        "SecondaryWeapon": { "min": 10, "max": 25 },
-        "HolsterWeapon": { "min": 10, "max": 25 }
-    },
-    "RemoveFIR": {
-        "SecureContainerItems": false,
-        "Helmet": true,
-        "Backpack": true,
-        "BackpackItems": true,
-        "Vest": true,
-        "VestItems": true,
-        "PocketItems": true,
-        "PrimaryWeapon": true,
-        "SecondaryWeapon": true,
-        "HolsterWeapon": true
+    "DoScavChanges": true,
+    "ScavChanges": {
+        "InstantCooldownOnDeath": false,
+        "NewCooldownTimeInMinutes": { "min": 5, "max": 10 },
+        "InstantCooldownOnLogin": true
     }
 }

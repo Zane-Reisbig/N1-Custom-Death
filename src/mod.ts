@@ -1,25 +1,40 @@
 import { DependencyContainer } from "tsyringe";
-import Helpers from "./helpers";
-import Source from "./originalEndRaid";
-import ItemTransferHelper from "./itemTransferHelper";
-import PlayerStatusDetails from "./playerStatusDetails";
+
+import { SPTEndLocalRaid } from "./SPTSource/endLocalRaid";
+import { SPTStartLocalRaid } from "./SPTSource/startLocalRaid";
+
+import Timers from "./helpers/timers";
+import Helpers from "./helpers/helpers";
+import ItemHelpers from "./helpers/itemHelpers";
+import InventoryHelpers, { PMCInventory } from "./helpers/inventoryHelpers";
+import ItemTransferHelper from "./helpers/itemTransferHelper";
+import PlayerStatusDetails from "./Definitions/playerStatusDetails";
+
+import { ContextVariableType, EquipmentSlots } from "./Definitions/enums";
+
 import { LocationLifecycleService } from "@spt/services/LocationLifecycleService";
-import InventoryHelpers, { PMCInventory } from "./inventoryHelpers";
 import { IPmcData } from "@spt/models/eft/common/IPmcData";
-import { IEndLocalRaidRequestData } from "@spt/models/eft/match/IEndLocalRaidRequestData";
 import { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod";
+import { ContextVariable } from "@spt/context/ContextVariable";
 
 import * as config from "./config.json";
-import ItemHelpers from "./itemHelpers";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 
 class Mod implements IPreSptLoadMod {
     private static container: DependencyContainer;
-    private static _helpers: Helpers;
+    private static endLocalRaidInst: SPTEndLocalRaid;
+    private static startLocalRaidInst: SPTStartLocalRaid;
 
+    private static _helpers: Helpers;
     private static get helpers() {
-        this._helpers = Helpers.get(Mod.container);
+        if (Mod._helpers == null) {
+            Mod._helpers = Helpers.get(Mod.container);
+        }
+
         return Mod._helpers;
     }
+
+    private static preRaidInventory?: IItem[];
 
     private static doDurabilityChange(playerInv: PMCInventory) {
         // This sucks
@@ -34,7 +49,8 @@ class Mod implements IPreSptLoadMod {
                     ItemHelpers.changeDurabiltityByPercentage(
                         plate,
                         allItems[plate._tpl],
-                        config.DurabilityLossPercentages.Vest,
+                        config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
+                            .Vest,
                         { isArmor: true }
                     );
             }
@@ -50,7 +66,8 @@ class Mod implements IPreSptLoadMod {
                     ItemHelpers.changeDurabiltityByPercentage(
                         plate,
                         allItems[plate._tpl],
-                        config.DurabilityLossPercentages.Vest,
+                        config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
+                            .Vest,
                         { isArmor: true }
                     );
             }
@@ -64,7 +81,8 @@ class Mod implements IPreSptLoadMod {
             ItemHelpers.changeDurabiltityByPercentage(
                 playerInv.primary,
                 allItems[playerInv.primary._tpl],
-                config.DurabilityLossPercentages.PrimaryWeapon
+                config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
+                    .PrimaryWeapon
             );
         } else {
             Mod.helpers.logger.log("No Primay to damage", "green");
@@ -76,7 +94,8 @@ class Mod implements IPreSptLoadMod {
             ItemHelpers.changeDurabiltityByPercentage(
                 playerInv.secondary,
                 allItems[playerInv.secondary._tpl],
-                config.DurabilityLossPercentages.SecondaryWeapon
+                config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
+                    .SecondaryWeapon
             );
         } else {
             Mod.helpers.logger.log("No Secondary to damage", "green");
@@ -84,11 +103,12 @@ class Mod implements IPreSptLoadMod {
         // Secondary After
 
         // Holster Before
-        if (playerInv.holsterWeapon) {
+        if (playerInv.holster) {
             ItemHelpers.changeDurabiltityByPercentage(
-                playerInv.holsterWeapon,
-                allItems[playerInv.holsterWeapon._tpl],
-                config.DurabilityLossPercentages.HolsterWeapon
+                playerInv.holster,
+                allItems[playerInv.holster._tpl],
+                config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
+                    .HolsterWeapon
             );
         } else {
             Mod.helpers.logger.log("No Holster Weapon to damage", "green");
@@ -99,43 +119,58 @@ class Mod implements IPreSptLoadMod {
     private static doFIRChange(playerInv: PMCInventory) {
         // God damn this one is ugly too
 
-        if (config.RemoveFIR.PrimaryWeapon && playerInv.primary) {
+        if (
+            config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.PrimaryWeapon &&
+            playerInv.primary
+        ) {
             InventoryHelpers.removeFIRFromInventory([playerInv.primary]);
         }
 
-        if (config.RemoveFIR.SecondaryWeapon && playerInv.secondary) {
+        if (
+            config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.SecondaryWeapon &&
+            playerInv.secondary
+        ) {
             InventoryHelpers.removeFIRFromInventory([playerInv.secondary]);
         }
-        if (config.RemoveFIR.HolsterWeapon && playerInv.holsterWeapon) {
-            InventoryHelpers.removeFIRFromInventory([playerInv.holsterWeapon]);
+        if (
+            config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.HolsterWeapon &&
+            playerInv.holster
+        ) {
+            InventoryHelpers.removeFIRFromInventory([playerInv.holster]);
         }
 
-        if (config.RemoveFIR.Helmet && playerInv.helmet) {
+        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.Helmet && playerInv.helmet) {
             InventoryHelpers.removeFIRFromInventory([playerInv.helmet]);
         }
-        if (config.RemoveFIR.Backpack && playerInv.bag) {
+        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.Backpack && playerInv.bag) {
             InventoryHelpers.removeFIRFromInventory([playerInv.bag]);
         }
 
-        if (config.RemoveFIR.BackpackItems) {
+        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.BackpackItems) {
             InventoryHelpers.removeFIRFromInventory(playerInv.bagItems);
         }
-        if (config.RemoveFIR.Vest && playerInv.tacticalVest) {
+        if (
+            config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.Vest &&
+            playerInv.tacticalVest
+        ) {
             InventoryHelpers.removeFIRFromInventory([playerInv.tacticalVest]);
         }
-        if (config.RemoveFIR.Vest && playerInv.armorVest) {
+        if (
+            config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.Vest &&
+            playerInv.armorVest
+        ) {
             InventoryHelpers.removeFIRFromInventory([playerInv.armorVest]);
         }
 
-        if (config.RemoveFIR.VestItems) {
+        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.VestItems) {
             InventoryHelpers.removeFIRFromInventory(playerInv.tacticalVestItems);
         }
 
-        if (config.RemoveFIR.PocketItems) {
+        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.PocketItems) {
             InventoryHelpers.removeFIRFromInventory(playerInv.pocketItems);
         }
 
-        if (config.RemoveFIR.SecureContainerItems) {
+        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.SecureContainerItems) {
             InventoryHelpers.removeFIRFromInventory(playerInv.containerItems);
         }
     }
@@ -147,19 +182,19 @@ class Mod implements IPreSptLoadMod {
     ) {
         const bagRemoval = InventoryHelpers.selectPercentageOfItemsFromInventory(
             playerInv.bagItems,
-            config.ItemLossPercentages.bag
+            config.Behavior.DoRandomItemLossOnDeath.ItemLossPercentages.Bag
         );
         InventoryHelpers.dumpInventory(bagRemoval, "Bag Removal", "red");
 
         const pocketRemoval = InventoryHelpers.selectPercentageOfItemsFromInventory(
             playerInv.pocketItems,
-            config.ItemLossPercentages.pocket
+            config.Behavior.DoRandomItemLossOnDeath.ItemLossPercentages.Pocket
         );
         InventoryHelpers.dumpInventory(pocketRemoval, "Pocket Removal", "red");
 
         const vestRemoval = InventoryHelpers.selectPercentageOfItemsFromInventory(
             playerInv.bagItems,
-            config.ItemLossPercentages.vest
+            config.Behavior.DoRandomItemLossOnDeath.ItemLossPercentages.Vest
         );
         InventoryHelpers.dumpInventory(vestRemoval, "Vest Removal", "red");
 
@@ -168,54 +203,123 @@ class Mod implements IPreSptLoadMod {
         }
     }
 
-    private static setInventory(playerData: IPmcData, sessionID: string) {
-        Mod.helpers.logger.log("We are setting the inventory on death!", "green");
+    private static scavChanges(playerData: IPmcData, sessionID: string) {
+        if (!config.DoScavChanges) return;
 
-        const playerInv = new PMCInventory(playerData, Mod.helpers);
+        const newCooldown = new Date(
+            Date.now() / 1000 +
+                Helpers.randInt(
+                    config.ScavChanges.InstantCooldownOnDeath
+                        ? { min: 0, max: 1 }
+                        : config.ScavChanges.NewCooldownTimeInMinutes
+                ) *
+                    60
+        );
+
+        // @ts-expect-error This is valid, Date's can be parsed to Date.parse lmao
+        playerData.Info.SavageLockTime = Date.parse(newCooldown);
+    }
+
+    private static resetToPreRaidInventory(pmcData: IPmcData) {
+        const currentPlayerInv = InventoryHelpers.clonePMCInv(pmcData);
+
+        if (Mod.preRaidInventory == null) {
+            throw new Error("Failed to get player inventory on raid start...");
+        }
+
+        const [postRaidContainer, postRaidContainerItems] =
+            InventoryHelpers.extractItemAndContents(
+                EquipmentSlots.SECURED_CONTAINER,
+                currentPlayerInv
+            );
+
+        if (postRaidContainer != null) {
+            const containerItemIDs: string[] = postRaidContainerItems.reduce(
+                (init, cur) => [...init, cur._id],
+                [] as string[]
+            );
+
+            const deDupedItemList: IItem[] = [];
+
+            for (const item of Mod.preRaidInventory) {
+                // remove any item moved to your case in-raid from pre raid inventory
+                // no dupes in this dojo
+                if (containerItemIDs.includes(item._id)) continue;
+
+                deDupedItemList.push(item);
+            }
+
+            const refreshedItems = Mod.helpers.itemHelper.replaceIDs(
+                [...deDupedItemList, ...postRaidContainerItems],
+                pmcData
+            );
+
+            pmcData.Inventory.items = [];
+            pmcData.Inventory.items = [...refreshedItems];
+        } else {
+            Mod.helpers.logger.log("How did you get a container in raid? Crazy.", "red");
+        }
+    }
+
+    private static doRandomItemLossOnDeath(pmcData: IPmcData, sessionID: string) {
+        const playerInv = new PMCInventory(pmcData, Mod.helpers);
 
         Mod.doFIRChange(playerInv);
 
         Mod.helpers.logger.log(
-            `Removing Items: ${config.DoRandomItemLossOnDeath}`,
-            config.DoRandomItemLossOnDeath ? "red" : "green"
+            `Removing Items: ${config.Behavior.DoRandomItemLossOnDeath}`,
+            config.Behavior.DoRandomItemLossOnDeath ? "red" : "green"
         );
-        if (config.DoRandomItemLossOnDeath) {
-            Mod.doRemoval(playerInv, playerData, sessionID);
+        if (config.Behavior.DoRandomItemLossOnDeath) {
+            Mod.doRemoval(playerInv, pmcData, sessionID);
         }
 
         Mod.helpers.logger.log(
-            `Durability Lost?: ${config.DoDurabilityLoss}`,
-            config.DoDurabilityLoss ? "red" : "green"
+            `Durability Lost?: ${config.Behavior.DoRandomItemLossOnDeath.DoDurabilityLoss}`,
+            config.Behavior.DoRandomItemLossOnDeath.DoDurabilityLoss ? "red" : "green"
         );
-        if (config.DoDurabilityLoss) {
+        if (config.Behavior.DoRandomItemLossOnDeath.DoDurabilityLoss) {
             Mod.doDurabilityChange(playerInv);
         }
     }
 
-    private static endLocalRaid(sessionID: string, request: IEndLocalRaidRequestData) {
-        const sourceInstance = new Source();
-        // Source.validateMembers(sourceInstance);
+    private static runInventoryActions(pmcData: IPmcData, sessionID: string) {
+        Mod.helpers.logger.log("We are setting the inventory on death!", "green");
 
-        sourceInstance.endLocalRaid(sessionID, request);
+        if (config.Behavior.DoRandomItemLossOnDeath.Enabled) {
+            Mod.doRandomItemLossOnDeath(pmcData, sessionID);
+            Mod.helpers.logger.log("Inventory has been picked thru!", "green");
+        } else if (config.Behavior.ResetToPreRaidInventory.Enabled) {
+            Mod.resetToPreRaidInventory(pmcData);
+            Mod.helpers.logger.log("Inventory reset!", "green");
+        } else {
+            Mod.helpers.logger.log("Inventory left untouched...", "green");
+        }
     }
 
     public preSptLoad(container: DependencyContainer) {
         Mod.container = container;
-        // Mod.readSetConfig();
+
+        Mod.endLocalRaidInst = new SPTEndLocalRaid();
+        Mod.startLocalRaidInst = new SPTStartLocalRaid();
+        SPTEndLocalRaid.onPMCDeath = Mod.runInventoryActions;
+        SPTEndLocalRaid.onScavDeath = Mod.scavChanges;
+
+        SPTStartLocalRaid.onRaidStart = (pmcData, sessionID, _res) => {
+            Mod.helpers.logger.log(`SessionID: ${sessionID}`, "green");
+
+            Mod.preRaidInventory = InventoryHelpers.clonePMCInv(pmcData);
+        };
 
         // Dear god do not forget to set helpers on other classes
-        Source.helpers = Mod.helpers;
+        SPTStartLocalRaid.helpers = Mod.helpers;
+        SPTEndLocalRaid.helpers = Mod.helpers;
+
         ItemTransferHelper.helpers = Mod.helpers;
         PlayerStatusDetails.helpers = Mod.helpers;
         InventoryHelpers.helpers = Mod.helpers;
         ItemHelpers.helpers = Mod.helpers;
         // srsly \\
-
-        // This is the actual mod, the rest of this mess is the re-implementation
-        //  of the LocationLifeCycleService, starting at the public method "endLocalRaid"
-        //
-        // This hooks in after the "postRaidPMC" function from the original "spt/server"
-        Source.setPlayerInventoryOnDeath = Mod.setInventory;
 
         // This is the hook from the tutorial!
         // Woo-Hooo!!
@@ -224,11 +328,34 @@ class Mod implements IPreSptLoadMod {
 
             //@ts-expect-error This is correct actually
             (_t, result: LocationLifecycleService) => {
-                result.endLocalRaid = Mod.endLocalRaid;
+                result.endLocalRaid = Mod.endLocalRaidInst.endLocalRaid;
+                result.startLocalRaid = Mod.startLocalRaidInst.startLocalRaid;
             },
             { frequency: "Always" }
+        );
+
+        // Let those doggies lay for ~20 minutes (default scav timer) if so chosen in the config
+        if (!config.DoScavChanges || !config.ScavChanges.InstantCooldownOnLogin) return;
+
+        // Otherwise wait for the session and reset that shit yo'
+        Timers.waitForNonFalsey<ContextVariable>(
+            () =>
+                Mod.helpers.applicationContext.getLatestValue(
+                    ContextVariableType.SESSION_ID
+                ),
+            (val) => {
+                const scav = Mod.helpers.profileHelper.getScavProfile(
+                    val.getValue<string>()
+                );
+
+                // set to 10 secs
+                scav.Info.SavageLockTime = Date.now() / 1000 + 10;
+                Mod.helpers.logger.log("Scav cooldown reset!", "green");
+            }
         );
     }
 }
 
 export const mod = new Mod();
+
+// TODO: This raid never happend, I.E. A "That's bullshit" command

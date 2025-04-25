@@ -1,6 +1,7 @@
-import { IItem } from "@spt/models/eft/common/tables/IItem";
 import Helpers from "./helpers";
-import { SessionDetails } from "./originalEndRaid";
+import { SessionDetails } from "../originalEndRaid";
+
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 
 enum TransferTypes {
     BTR = "btr",

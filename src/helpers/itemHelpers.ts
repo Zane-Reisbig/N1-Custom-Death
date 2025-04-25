@@ -1,6 +1,7 @@
+import Helpers from "./helpers";
+
 import { IItem, IUpdRepairable } from "@spt/models/eft/common/tables/IItem";
 import { IProps, ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
-import Helpers from "./helpers";
 import { IArmorMaterials } from "@spt/models/eft/common/IGlobals";
 
 export default class ItemHelpers {
@@ -12,6 +13,22 @@ export default class ItemHelpers {
 
     public static isRepairable(item: IItem) {
         return item.upd && item.upd.Repairable;
+    }
+
+    public static isDirectChild(parent: IItem, child: IItem) {
+        return parent._id === child.parentId;
+    }
+
+    public static getDirectChildrenFromContainer(container: IItem, children: IItem[]) {
+        const out: IItem[] = [];
+
+        for (const item of children) {
+            if (!ItemHelpers.isDirectChild(container, item)) return;
+
+            out.push(item);
+        }
+
+        return out;
     }
 
     public static getRandomisedArmorRepairDegradationValue(

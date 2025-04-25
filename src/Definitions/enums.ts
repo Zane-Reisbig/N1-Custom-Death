@@ -161,3 +161,143 @@ export enum EquipmentSlots {
 export enum OtherSlots {
     CARTRIDGE = "cartridges",
 }
+
+export enum ContextVariableType {
+    /** Logged in users session id */
+    SESSION_ID = 0,
+    /** Currently acive raid information */
+    RAID_CONFIGURATION = 1,
+    /** SessionID + Timestamp when client first connected, has _ between values */
+    CLIENT_START_TIMESTAMP = 2,
+    /** When player is loading into map and loot is requested */
+    REGISTER_PLAYER_REQUEST = 3,
+    RAID_ADJUSTMENTS = 4,
+    /** Data returned from client request object from endLocalRaid() */
+    TRANSIT_INFO = 5,
+}
+
+export enum Traders {
+    PRAPOR = "54cb50c76803fa8b248b4571",
+    THERAPIST = "54cb57776803fa99248b456e",
+    FENCE = "579dc571d53a0658a154fbec",
+    SKIER = "58330581ace78e27b8b10cee",
+    PEACEKEEPER = "5935c25fb3acc3127c3d8cd9",
+    MECHANIC = "5a7c2eca46aef81a7ca2145d",
+    RAGMAN = "5ac3b934156ae10c4430e83c",
+    JAEGER = "5c0647fdd443bc2504c2d371",
+    LIGHTHOUSEKEEPER = "638f541a29ffd1183d187f57",
+    BTR = "656f0f98d80a697f855d34b1",
+    REF = "6617beeaa9cfa777ca915b7c",
+}
+
+export enum MessageType {
+    USER_MESSAGE = 1,
+    NPC_TRADER = 2,
+    AUCTION_MESSAGE = 3,
+    FLEAMARKET_MESSAGE = 4,
+    ADMIN_MESSAGE = 5,
+    GROUP_CHAT_MESSAGE = 6,
+    SYSTEM_MESSAGE = 7,
+    INSURANCE_RETURN = 8,
+    GLOBAL_CHAT = 9,
+    QUEST_START = 10,
+    QUEST_FAIL = 11,
+    QUEST_SUCCESS = 12,
+    MESSAGE_WITH_ITEMS = 13,
+    INITIAL_SUPPORT = 14,
+    BTR_ITEMS_DELIVERY = 15,
+}
+
+export enum CustomisationSource {
+    QUEST = "quest",
+    PRESTIGE = "prestige",
+    ACHIEVEMENT = "achievement",
+    UNLOCKED_IN_GAME = "unlockedInGame",
+    PAID = "paid",
+    DROP = "drop",
+    DEFAULT = "default",
+}
+
+export enum QuestStatus {
+    Locked = 0,
+    AvailableForStart = 1,
+    Started = 2,
+    AvailableForFinish = 3,
+    Success = 4,
+    Fail = 5,
+    FailRestartable = 6,
+    MarkedAsFailed = 7,
+    Expired = 8,
+    AvailableAfter = 9,
+}
+
+export enum TransitionType {
+    None = 0,
+    Common = 1,
+    Event = 2,
+}
+
+export enum ExitStatus {
+    SURVIVED = "Survived",
+    KILLED = "Killed",
+    LEFT = "Left",
+    RUNNER = "Runner",
+    MISSINGINACTION = "MissingInAction",
+    TRANSIT = "Transit",
+}
+export enum MemberCategory {
+    DEFAULT = 0,
+    DEVELOPER = 1,
+    UNIQUE_ID = 2,
+    TRADER = 4,
+    GROUP = 8,
+    SYSTEM = 16,
+    CHAT_MODERATOR = 32,
+    CHAT_MODERATOR_WITH_PERMANENT_BAN = 64,
+    UNIT_TEST = 128,
+    SHERPA = 256,
+    EMISSARY = 512,
+    UNHEARD = 1024,
+}
+
+export enum ItemAddedResult {
+    UNKNOWN = -1,
+    SUCCESS = 1,
+    NO_SPACE = 2,
+    NO_CONTAINERS = 3,
+    INCOMPATIBLE_ITEM = 4,
+}
+
+export enum BonusType {
+    ENERGY_REGENERATION = "EnergyRegeneration",
+    HYDRATION_REGENERATION = "HydrationRegeneration",
+    HEALTH_REGENERATION = "HealthRegeneration",
+    EXPERIENCE_RATE = "ExperienceRate",
+    QUEST_MONEY_REWARD = "QuestMoneyReward",
+    SCAV_COOLDOWN_TIMER = "ScavCooldownTimer",
+    UNLOCK_ITEM_CRAFT = "UnlockItemCraft",
+    UNLOCK_ITEM_PASSIVE_CREATION = "UnlockItemPassiveCreation",
+    UNLOCK_RANDOM_ITEM_CREATION = "UnlockRandomItemCreation",
+    SKILL_LEVELING_BOOST = "SkillLevelingBoost",
+    DEBUFF_END_DELAY = "DebuffEndDelay",
+    RAGFAIR_COMMISSION = "RagfairCommission",
+    INSURANCE_RETURN_TIME = "InsuranceReturnTime",
+    UNLOCK_WEAPON_MODIFICATION = "UnlockWeaponModification",
+    UNLOCK_SCAV_PLAY = "UnlockScavPlay",
+    UNLOCK_ADD_OFFER = "UnlockAddOffer",
+    UNLOCK_ITEM_CHARGE = "UnlockItemCharge",
+    RECEIVE_ITEM_BONUS = "ReceiveItemBonus",
+    UNLOCK_UNIQUE_ID = "UnlockUniqueId",
+    INCREASE_CANISTER_SLOTS = "IncreaseCanisterSlots",
+    ADDITIONAL_SLOTS = "AdditionalSlots",
+    FUEL_CONSUMPTION = "FuelConsumption",
+    REPAIR_WEAPON_BONUS = "RepairWeaponBonus",
+    REPAIR_ARMOR_BONUS = "RepairArmorBonus",
+    UNLOCK_WEAPON_REPAIR = "UnlockWeaponRepair",
+    UNLOCK_ARMOR_REPAIR = "UnlockArmorRepair",
+    STASH_SIZE = "StashSize",
+    MAXIMUM_ENERGY_RESERVE = "MaximumEnergyReserve",
+    TEXT_BONUS = "TextBonus",
+    SKILL_GROUP_LEVELING_BOOST = "SkillGroupLevelingBoost",
+    STASH_ROWS = "StashRows",
+}

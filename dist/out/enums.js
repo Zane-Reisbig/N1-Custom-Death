@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OtherSlots = exports.EquipmentSlots = exports.ConfigTypes = exports.BaseClasses = void 0;
+exports.ContextVariableType = exports.OtherSlots = exports.EquipmentSlots = exports.ConfigTypes = exports.BaseClasses = void 0;
 var BaseClasses;
 (function (BaseClasses) {
     BaseClasses["WEAPON"] = "5422acb9af1c889c16000029";
@@ -165,3 +165,17 @@ var OtherSlots;
 (function (OtherSlots) {
     OtherSlots["CARTRIDGE"] = "cartridges";
 })(OtherSlots || (exports.OtherSlots = OtherSlots = {}));
+var ContextVariableType;
+(function (ContextVariableType) {
+    /** Logged in users session id */
+    ContextVariableType[ContextVariableType["SESSION_ID"] = 0] = "SESSION_ID";
+    /** Currently acive raid information */
+    ContextVariableType[ContextVariableType["RAID_CONFIGURATION"] = 1] = "RAID_CONFIGURATION";
+    /** SessionID + Timestamp when client first connected, has _ between values */
+    ContextVariableType[ContextVariableType["CLIENT_START_TIMESTAMP"] = 2] = "CLIENT_START_TIMESTAMP";
+    /** When player is loading into map and loot is requested */
+    ContextVariableType[ContextVariableType["REGISTER_PLAYER_REQUEST"] = 3] = "REGISTER_PLAYER_REQUEST";
+    ContextVariableType[ContextVariableType["RAID_ADJUSTMENTS"] = 4] = "RAID_ADJUSTMENTS";
+    /** Data returned from client request object from endLocalRaid() */
+    ContextVariableType[ContextVariableType["TRANSIT_INFO"] = 5] = "TRANSIT_INFO";
+})(ContextVariableType || (exports.ContextVariableType = ContextVariableType = {}));

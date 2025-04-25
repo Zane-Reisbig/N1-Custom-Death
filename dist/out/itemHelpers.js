@@ -8,6 +8,18 @@ class ItemHelpers {
     static isRepairable(item) {
         return item.upd && item.upd.Repairable;
     }
+    static isDirectChild(parent, child) {
+        return parent._id === child.parentId;
+    }
+    static getDirectChildrenFromContainer(container, children) {
+        const out = [];
+        for (const item of children) {
+            if (!ItemHelpers.isDirectChild(container, item))
+                return;
+            out.push(item);
+        }
+        return out;
+    }
     static getRandomisedArmorRepairDegradationValue(armorMaterial, isRepairKit, armorMax, traderQualityMultipler) {
         // Degradation value is based on the armor material
         const armorMaterialSettings = ItemHelpers.helpers.databaseService.getGlobals().config.ArmorMaterials[armorMaterial];

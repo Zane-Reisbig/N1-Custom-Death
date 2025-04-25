@@ -1,14 +1,13 @@
-import { ILocation } from "@spt/models/eft/common/ILocation";
-import Helpers from "./helpers";
-import { SessionDetails } from "./originalEndRaid";
+import Helpers from "../helpers/helpers";
 
-enum ExitStatus {
-    KILLED = "Killed",
-    LEFT = "Left",
-    MISSINGINACTION = "MissingInAction",
-    RUNNER = "Runner",
-    SURVIVED = "Survived",
-    TRANSIT = "Transit",
+import { ILocation } from "@spt/models/eft/common/ILocation";
+import { IEndLocalRaidRequestData } from "@spt/models/eft/match/IEndLocalRaidRequestData";
+import { ExitStatus } from "./enums";
+
+export interface SessionDetails {
+    sessionId: string;
+    request: IEndLocalRaidRequestData;
+    playerDetails: PlayerStatusDetails;
 }
 
 export default class PlayerStatusDetails {
@@ -35,7 +34,7 @@ export default class PlayerStatusDetails {
         this.isPMC = tokens[1].toLowerCase() === "pmc";
 
         // prettier-ignore
-        this.isDead = [ExitStatus.KILLED, ExitStatus.LEFT, ExitStatus.RUNNER]
+        this.isDead = [ExitStatus.KILLED, ExitStatus.LEFT]
                         .includes(details.request.results.result);
         this.isTransfer = details.request.results.result === ExitStatus.TRANSIT;
         this.isSurvived = details.request.results.result === ExitStatus.SURVIVED;
