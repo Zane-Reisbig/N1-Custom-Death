@@ -423,6 +423,8 @@ class SPTEndLocalRaid {
         //            \\
         //            \\
         //            \\
+        // Just these lines commented out
+        // Despite saying "CertainItems" in the method name, it does it to all of em'
         // // Handle Removing of FIR status if player did not survive + not transferring
         // // Do after above filtering code to reduce work done
         // if (

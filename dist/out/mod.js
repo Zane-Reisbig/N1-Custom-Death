@@ -297,3 +297,4 @@ class Mod {
 }
 exports.mod = new Mod();
 // TODO: This raid never happend, I.E. A "That's bullshit" command
+// TODO: Playtest and make sure nothing is broken
