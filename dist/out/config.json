@@ -4,7 +4,7 @@
             "Comment": "Lose a percentage of items on death - ENABLED BY DEFAULT",
             "Comment_PS": "Only one behavior will be active at a time, 'DoRandomItemLossOnDeath' comes first *- ",
             "Comment_PS_PS": "-* in da' code so if it is enabled it will over-write any other behavor options",
-            "Enabled": false,
+            "Enabled": true,
             "ItemLossPercentages": {
                 "Bag": { "min": 20, "max": 50 },
                 "Vest": { "min": 0, "max": 20 },
@@ -56,7 +56,7 @@
         "Comment_PS": "Default insurance return time is",
         "Enabled": true,
         "EnableReturnTimeOverride": true,
-        "MaxReturnRangeInMinutes": { "min": 1, "max": 2 },
+        "MaxReturnRangeInMinutes": { "min": 10, "max": 20 },
         "KeepInMailBoxForever": true,
         "InsuranceAlwaysWorks": false
     }
