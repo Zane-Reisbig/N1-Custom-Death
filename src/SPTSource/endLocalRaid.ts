@@ -1,5 +1,6 @@
 import Helpers from "../helpers/helpers";
 import ItemTransferHelper from "../helpers/itemTransferHelper";
+import PlayerStatusDetails, { SessionDetails } from "../Definitions/playerStatusDetails";
 import {
     ContextVariableType,
     CustomisationSource,
@@ -13,7 +14,9 @@ import { IQuestStatus, ITraderInfo } from "@spt/models/eft/common/tables/IBotBas
 import { ISptProfile } from "@spt/models/eft/profile/ISptProfile";
 import { IEndLocalRaidRequestData } from "@spt/models/eft/match/IEndLocalRaidRequestData";
 import { IItem } from "@spt/models/eft/common/tables/IItem";
-import PlayerStatusDetails, { SessionDetails } from "../Definitions/playerStatusDetails";
+
+import * as config from "../config.json";
+import InventoryHelpers from "../helpers/inventoryHelpers";
 
 export class SPTEndLocalRaid {
     public static helpers: Helpers;
@@ -698,6 +701,9 @@ export class SPTEndLocalRaid {
         //            \\
         //            \\
 
+        // Just these lines commented out
+        // Despite saying "CertainItems" in the method name, it does it to all of em'
+
         // // Handle Removing of FIR status if player did not survive + not transferring
         // // Do after above filtering code to reduce work done
         // if (
@@ -817,8 +823,37 @@ export class SPTEndLocalRaid {
             isDead
         );
 
-        // This must occur _BEFORE_ `deleteInventory`, as that method clears insured items
-        this.handleInsuredItemLostEvent(sessionId, pmcProfile, request, locationName);
+        //            \\
+        //            \\
+        //            \\
+        // MOD SOURCE \\
+        //            \\
+        //            \\
+        //            \\
+
+        // If we revert the items back to the way they were, you couldn't have lost anything
+        // !!no dupes!!
+        if (!config.OnDeathBehavior.ResetToPreRaidInventory.Enabled) {
+            const playerInventoryItemIds = InventoryHelpers.clonePMCInv(pmcProfile).reduce(
+                (init, cur) => [...init, cur._id],
+                [] as string[]
+            );
+
+            // Since we keep items on death all insured items are no longer lost, so we need to amend the raid details
+            request.lostInsuredItems = request.lostInsuredItems.filter(
+                (i) => !playerInventoryItemIds.includes(i._id)
+            );
+
+            // This must occur _BEFORE_ `deleteInventory`, as that method clears insured items
+            this.handleInsuredItemLostEvent(sessionId, pmcProfile, request, locationName);
+        }
+
+        //            \\
+        //            \\
+        //            \\
+        //            \\
+        //            \\
+        //            \\
 
         if (isDead) {
             SPTEndLocalRaid.helpers.logger.log("Player is Dead", "red");
@@ -920,8 +955,6 @@ export class SPTEndLocalRaid {
     }
 
     public endLocalRaid = (sessionId: string, request: IEndLocalRaidRequestData) => {
-        SPTEndLocalRaid.helpers.logger.log("Raid Has ended...", "yellow");
-
         let endRaidPackage: SessionDetails = {
             sessionId: sessionId,
             request: request,

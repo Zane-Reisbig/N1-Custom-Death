@@ -1,11 +1,11 @@
 {
-    "Behavior": {
+    "OnDeathBehavior": {
         "DoRandomItemLossOnDeath": {
             "Comment": "Lose a percentage of items on death - ENABLED BY DEFAULT",
             "Comment_PS": "Only one behavior will be active at a time, 'DoRandomItemLossOnDeath' comes first *- ",
             "Comment_PS_PS": "-* in da' code so if it is enabled it will over-write any other behavor options",
 
-            "Enabled": true,
+            "Enabled": false,
 
             "ItemLossPercentages": {
                 "Bag": { "min": 20, "max": 50 },
@@ -50,10 +50,27 @@
             }
         }
     },
-    "DoScavChanges": true,
     "ScavChanges": {
+        "Comment": "It's the honor system for just quitting and reseting the scav timer.",
+        "Comment_PS": "I like to treat Scavs as a throwaway/warmup and I usually run around till I die *-",
+        "Comment_PS_PS": "-* I know I'm crazy, hence the config",
+
+        "Enabled": true,
+
+        "MaxCooldownRangeInMinutes": { "min": 5, "max": 10 },
         "InstantCooldownOnDeath": false,
-        "NewCooldownTimeInMinutes": { "min": 5, "max": 10 },
         "InstantCooldownOnLogin": true
+    },
+    "InsuranceChanges": {
+        "Comment": "About one raid, then you can go back to ya old kit.",
+        "Comment_PS": "Default insurance return time is",
+
+        "Enabled": true,
+
+        "EnableReturnTimeOverride": true,
+        "MaxReturnRangeInMinutes": { "min": 1, "max": 2 },
+
+        "KeepInMailBoxForever": true,
+        "InsuranceAlwaysWorks": false
     }
 }

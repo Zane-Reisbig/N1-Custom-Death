@@ -67,8 +67,8 @@ class Mod {
             for (const plate of playerInv.helmetArmorPlates) {
                 plate.upd &&
                     plate.upd.Repairable &&
-                    itemHelpers_1.default.changeDurabiltityByPercentage(plate, allItems[plate._tpl], config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
-                        .Vest, { isArmor: true });
+                    itemHelpers_1.default.changeDurabiltityByPercentage(plate, allItems[plate._tpl], config.OnDeathBehavior.DoRandomItemLossOnDeath
+                        .DurabilityLossPercentages.Vest, { isArmor: true });
             }
         }
         else {
@@ -79,8 +79,8 @@ class Mod {
         if (playerInv.armorVest || playerInv.tacticalVest) {
             for (const plate of playerInv.armorVestPlates) {
                 plate.upd &&
-                    itemHelpers_1.default.changeDurabiltityByPercentage(plate, allItems[plate._tpl], config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
-                        .Vest, { isArmor: true });
+                    itemHelpers_1.default.changeDurabiltityByPercentage(plate, allItems[plate._tpl], config.OnDeathBehavior.DoRandomItemLossOnDeath
+                        .DurabilityLossPercentages.Vest, { isArmor: true });
             }
         }
         else {
@@ -89,7 +89,7 @@ class Mod {
         // Vest After
         // Primary Before
         if (playerInv.primary) {
-            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.primary, allItems[playerInv.primary._tpl], config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
+            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.primary, allItems[playerInv.primary._tpl], config.OnDeathBehavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
                 .PrimaryWeapon);
         }
         else {
@@ -98,7 +98,7 @@ class Mod {
         // Primary After
         // Secondary Before
         if (playerInv.secondary) {
-            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.secondary, allItems[playerInv.secondary._tpl], config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
+            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.secondary, allItems[playerInv.secondary._tpl], config.OnDeathBehavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
                 .SecondaryWeapon);
         }
         else {
@@ -107,7 +107,7 @@ class Mod {
         // Secondary After
         // Holster Before
         if (playerInv.holster) {
-            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.holster, allItems[playerInv.holster._tpl], config.Behavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
+            itemHelpers_1.default.changeDurabiltityByPercentage(playerInv.holster, allItems[playerInv.holster._tpl], config.OnDeathBehavior.DoRandomItemLossOnDeath.DurabilityLossPercentages
                 .HolsterWeapon);
         }
         else {
@@ -117,119 +117,141 @@ class Mod {
     }
     static doFIRChange(playerInv) {
         // God damn this one is ugly too
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.PrimaryWeapon &&
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.PrimaryWeapon &&
             playerInv.primary) {
             inventoryHelpers_1.default.removeFIRFromInventory([playerInv.primary]);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.SecondaryWeapon &&
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.SecondaryWeapon &&
             playerInv.secondary) {
             inventoryHelpers_1.default.removeFIRFromInventory([playerInv.secondary]);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.HolsterWeapon &&
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.HolsterWeapon &&
             playerInv.holster) {
             inventoryHelpers_1.default.removeFIRFromInventory([playerInv.holster]);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.Helmet && playerInv.helmet) {
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.Helmet &&
+            playerInv.helmet) {
             inventoryHelpers_1.default.removeFIRFromInventory([playerInv.helmet]);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.Backpack && playerInv.bag) {
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.Backpack &&
+            playerInv.bag) {
             inventoryHelpers_1.default.removeFIRFromInventory([playerInv.bag]);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.BackpackItems) {
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.BackpackItems) {
             inventoryHelpers_1.default.removeFIRFromInventory(playerInv.bagItems);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.Vest &&
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.Vest &&
             playerInv.tacticalVest) {
             inventoryHelpers_1.default.removeFIRFromInventory([playerInv.tacticalVest]);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.Vest &&
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.Vest &&
             playerInv.armorVest) {
             inventoryHelpers_1.default.removeFIRFromInventory([playerInv.armorVest]);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.VestItems) {
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.VestItems) {
             inventoryHelpers_1.default.removeFIRFromInventory(playerInv.tacticalVestItems);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.PocketItems) {
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.PocketItems) {
             inventoryHelpers_1.default.removeFIRFromInventory(playerInv.pocketItems);
         }
-        if (config.Behavior.DoRandomItemLossOnDeath.RemoveFIR.SecureContainerItems) {
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.RemoveFIR.SecureContainerItems) {
             inventoryHelpers_1.default.removeFIRFromInventory(playerInv.containerItems);
         }
     }
     static doRemoval(playerInv, playerData, sessionID) {
-        const bagRemoval = inventoryHelpers_1.default.selectPercentageOfItemsFromInventory(playerInv.bagItems, config.Behavior.DoRandomItemLossOnDeath.ItemLossPercentages.Bag);
+        const bagRemoval = inventoryHelpers_1.default.selectPercentageOfItemsFromInventory(playerInv.bagItems, config.OnDeathBehavior.DoRandomItemLossOnDeath.ItemLossPercentages.Bag);
         inventoryHelpers_1.default.dumpInventory(bagRemoval, "Bag Removal", "red");
-        const pocketRemoval = inventoryHelpers_1.default.selectPercentageOfItemsFromInventory(playerInv.pocketItems, config.Behavior.DoRandomItemLossOnDeath.ItemLossPercentages.Pocket);
+        const pocketRemoval = inventoryHelpers_1.default.selectPercentageOfItemsFromInventory(playerInv.pocketItems, config.OnDeathBehavior.DoRandomItemLossOnDeath.ItemLossPercentages.Pocket);
         inventoryHelpers_1.default.dumpInventory(pocketRemoval, "Pocket Removal", "red");
-        const vestRemoval = inventoryHelpers_1.default.selectPercentageOfItemsFromInventory(playerInv.bagItems, config.Behavior.DoRandomItemLossOnDeath.ItemLossPercentages.Vest);
+        const vestRemoval = inventoryHelpers_1.default.selectPercentageOfItemsFromInventory(playerInv.bagItems, config.OnDeathBehavior.DoRandomItemLossOnDeath.ItemLossPercentages.Vest);
         inventoryHelpers_1.default.dumpInventory(vestRemoval, "Vest Removal", "red");
         for (const item of [...bagRemoval, ...pocketRemoval, ...vestRemoval]) {
             Mod.helpers.sptInventoryHelper.removeItem(playerData, item._id, sessionID);
         }
     }
     static scavChanges(playerData, sessionID) {
-        if (!config.DoScavChanges)
+        if (!config.ScavChanges.Enabled)
             return;
         const newCooldown = new Date(Date.now() / 1000 +
             helpers_1.default.randInt(config.ScavChanges.InstantCooldownOnDeath
                 ? { min: 0, max: 1 }
-                : config.ScavChanges.NewCooldownTimeInMinutes) *
+                : config.ScavChanges.MaxCooldownRangeInMinutes) *
                 60);
-        // @ts-expect-error This is valid, Date's can be parsed to Date.parse lmao
+        // @ts-expect-error This is valid, Dates can be parsed by 'Date.parse()' lmao
         playerData.Info.SavageLockTime = Date.parse(newCooldown);
     }
-    static setInventory(pmcData, sessionID) {
-        Mod.helpers.logger.log("We are setting the inventory on death!", "green");
-        if (config.Behavior.DoRandomItemLossOnDeath.Enabled) {
-            const playerInv = new inventoryHelpers_1.PMCInventory(pmcData, Mod.helpers);
-            Mod.doFIRChange(playerInv);
-            Mod.helpers.logger.log(`Removing Items: ${config.Behavior.DoRandomItemLossOnDeath}`, config.Behavior.DoRandomItemLossOnDeath ? "red" : "green");
-            if (config.Behavior.DoRandomItemLossOnDeath) {
-                Mod.doRemoval(playerInv, pmcData, sessionID);
-            }
-            Mod.helpers.logger.log(`Durability Lost?: ${config.Behavior.DoRandomItemLossOnDeath.DoDurabilityLoss}`, config.Behavior.DoRandomItemLossOnDeath.DoDurabilityLoss ? "red" : "green");
-            if (config.Behavior.DoRandomItemLossOnDeath.DoDurabilityLoss) {
-                Mod.doDurabilityChange(playerInv);
-            }
+    static resetToPreRaidInventory(pmcData) {
+        const currentPlayerInv = inventoryHelpers_1.default.clonePMCInv(pmcData);
+        if (Mod.preRaidInventory == null) {
+            throw new Error("Failed to get player inventory on raid start...");
         }
-        else if (config.Behavior.ResetToPreRaidInventory.Enabled) {
-            const currentPlayerInv = inventoryHelpers_1.default.clonePMCInv(pmcData);
-            if (Mod.preRaidInventory == null) {
-                throw new Error("Failed to get player inventory on raid start...");
+        const [postRaidContainer, postRaidContainerItems] = inventoryHelpers_1.default.extractItemAndContents(enums_1.EquipmentSlots.SECURED_CONTAINER, currentPlayerInv);
+        if (postRaidContainer != null) {
+            const containerItemIDs = postRaidContainerItems.reduce((init, cur) => [...init, cur._id], []);
+            const deDupedItemList = [];
+            for (const item of Mod.preRaidInventory) {
+                // remove any item moved to your case in-raid from pre raid inventory
+                // no dupes in this dojo
+                if (containerItemIDs.includes(item._id))
+                    continue;
+                deDupedItemList.push(item);
             }
-            const [postRaidContainer, postRaidContainerItems] = inventoryHelpers_1.default.extractItemAndContents(enums_1.EquipmentSlots.SECURED_CONTAINER, currentPlayerInv);
-            if (postRaidContainer != null) {
-                const containerItemIDs = postRaidContainerItems.reduce((init, cur) => [...init, cur._id], []);
-                const deDupedItemList = [];
-                for (const item of Mod.preRaidInventory) {
-                    // remove any item moved to your case in-raid from pre raid inventory
-                    // no dupes in this dojo
-                    if (containerItemIDs.includes(item._id))
-                        continue;
-                    deDupedItemList.push(item);
-                }
-                const refreshedItems = Mod.helpers.itemHelper.replaceIDs([...deDupedItemList, ...postRaidContainerItems], pmcData);
-                pmcData.Inventory.items = [];
-                pmcData.Inventory.items = [...refreshedItems];
-            }
-            else {
-                Mod.helpers.logger.log("How did you get a container in raid? Crazy.", "green");
-            }
-            Mod.helpers.logger.log("Inventory Reset!", "green");
+            const refreshedItems = Mod.helpers.itemHelper.replaceIDs([...deDupedItemList, ...postRaidContainerItems], pmcData);
+            pmcData.Inventory.items = [];
+            pmcData.Inventory.items = [...refreshedItems];
         }
         else {
-            Mod.helpers.logger.log("Inventory Kept...", "green");
+            Mod.helpers.logger.log("How did you get a container in raid? Crazy.", "red");
+        }
+    }
+    static doRandomItemLossOnDeath(pmcData, sessionID) {
+        const playerInv = new inventoryHelpers_1.PMCInventory(pmcData, Mod.helpers);
+        Mod.doFIRChange(playerInv);
+        Mod.helpers.logger.log(`Removing Items: ${config.OnDeathBehavior.DoRandomItemLossOnDeath.Enabled}`, config.OnDeathBehavior.DoRandomItemLossOnDeath ? "red" : "green");
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath) {
+            Mod.doRemoval(playerInv, pmcData, sessionID);
+        }
+        Mod.helpers.logger.log(`Durability Lost?: ${config.OnDeathBehavior.DoRandomItemLossOnDeath.DoDurabilityLoss}`, config.OnDeathBehavior.DoRandomItemLossOnDeath.DoDurabilityLoss
+            ? "red"
+            : "green");
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.DoDurabilityLoss) {
+            Mod.doDurabilityChange(playerInv);
+        }
+    }
+    static runInventoryActions(pmcData, sessionID) {
+        Mod.helpers.logger.log("We are setting the inventory on death!", "green");
+        if (config.OnDeathBehavior.DoRandomItemLossOnDeath.Enabled) {
+            Mod.doRandomItemLossOnDeath(pmcData, sessionID);
+            Mod.helpers.logger.log("Inventory has been picked thru!", "green");
+        }
+        else if (config.OnDeathBehavior.ResetToPreRaidInventory.Enabled) {
+            Mod.resetToPreRaidInventory(pmcData);
+            Mod.helpers.logger.log("Inventory reset!", "green");
+        }
+        else {
+            Mod.helpers.logger.log("Inventory left untouched...", "green");
         }
     }
     preSptLoad(container) {
         Mod.container = container;
         Mod.endLocalRaidInst = new endLocalRaid_1.SPTEndLocalRaid();
         Mod.startLocalRaidInst = new startLocalRaid_1.SPTStartLocalRaid();
-        endLocalRaid_1.SPTEndLocalRaid.onPMCDeath = Mod.setInventory;
+        endLocalRaid_1.SPTEndLocalRaid.onPMCDeath = Mod.runInventoryActions;
         endLocalRaid_1.SPTEndLocalRaid.onScavDeath = Mod.scavChanges;
         startLocalRaid_1.SPTStartLocalRaid.onRaidStart = (pmcData, sessionID, _res) => {
             Mod.helpers.logger.log(`SessionID: ${sessionID}`, "green");
             Mod.preRaidInventory = inventoryHelpers_1.default.clonePMCInv(pmcData);
+            if (config.InsuranceChanges.Enabled) {
+                const insuranceConfig = Mod.helpers.configServer.getConfig(enums_1.ConfigTypes.INSURANCE);
+                if (config.InsuranceChanges.EnableReturnTimeOverride) {
+                    insuranceConfig.returnTimeOverrideSeconds = Math.floor(helpers_1.default.randInt(config.InsuranceChanges.MaxReturnRangeInMinutes) *
+                        60);
+                    insuranceConfig.runIntervalSeconds =
+                        insuranceConfig.returnTimeOverrideSeconds / 2;
+                    Mod.helpers.logger.log(`Insurance Returns in: ${insuranceConfig.returnTimeOverrideSeconds / 60} minutes`, "green");
+                    Mod.helpers.logger.log(`Next Insurance Run in: ${insuranceConfig.runIntervalSeconds / 60} minutes`, "green");
+                }
+            }
         };
         // Dear god do not forget to set helpers on other classes
         startLocalRaid_1.SPTStartLocalRaid.helpers = Mod.helpers;
@@ -239,6 +261,20 @@ class Mod {
         inventoryHelpers_1.default.helpers = Mod.helpers;
         itemHelpers_1.default.helpers = Mod.helpers;
         // srsly \\
+        // Thankfully we can just update the config and SPT will do the rest
+        if (config.InsuranceChanges.Enabled) {
+            const insuranceConfig = Mod.helpers.configServer.getConfig(enums_1.ConfigTypes.INSURANCE);
+            if (config.InsuranceChanges.InsuranceAlwaysWorks) {
+                insuranceConfig.chanceNoAttachmentsTakenPercent = 100;
+                for (const key in insuranceConfig.returnChancePercent) {
+                    insuranceConfig.returnChancePercent[key] = 100;
+                }
+            }
+            if (config.InsuranceChanges.KeepInMailBoxForever) {
+                // Not technically infinite but I think 999 hours should be long enough
+                insuranceConfig.storageTimeOverrideSeconds = 1000 * 60 * 60 * 999;
+            }
+        }
         // This is the hook from the tutorial!
         // Woo-Hooo!!
         container.afterResolution("LocationLifecycleService", 
@@ -248,7 +284,7 @@ class Mod {
             result.startLocalRaid = Mod.startLocalRaidInst.startLocalRaid;
         }, { frequency: "Always" });
         // Let those doggies lay for ~20 minutes (default scav timer) if so chosen in the config
-        if (!config.DoScavChanges || !config.ScavChanges.InstantCooldownOnLogin)
+        if (!config.ScavChanges.Enabled || !config.ScavChanges.InstantCooldownOnLogin)
             return;
         // Otherwise wait for the session and reset that shit yo'
         timers_1.default.waitForNonFalsey(() => Mod.helpers.applicationContext.getLatestValue(enums_1.ContextVariableType.SESSION_ID), (val) => {

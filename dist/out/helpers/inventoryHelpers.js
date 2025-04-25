@@ -164,8 +164,9 @@ class InventoryHelpers {
                 continue;
             item = subItem;
         }
+        //@ts-expect-error I have no idea what typescript is tripping about here, im doing the damn null check
         if (item == null) {
-            InventoryHelpers.helpers.logger.log("LINE 208 INVENTORY HELPERS IS FUCKED!!!!");
+            InventoryHelpers.helpers.logger.log("LINE 208 INVENTORY HELPERS IS FUCKED!!!!", "red");
             return [null, null];
         }
         for (const subItem of inventory) {
@@ -177,20 +178,6 @@ class InventoryHelpers {
     }
     static clonePMCInv(pmcData) {
         return InventoryHelpers.helpers.cloner.clone(pmcData.Inventory.items);
-    }
-    static refreshItemIDsFromInventory(inventory) {
-        const copy = [...inventory];
-        let translationTable = {};
-        copy.forEach((i) => {
-            translationTable[i._id] = InventoryHelpers.helpers.hashUtil.generate();
-            i._id = translationTable[i._id];
-        });
-        copy.forEach((i) => {
-            if (!i.parentId)
-                return;
-            i.parentId = translationTable[i.parentId];
-        });
-        return copy;
     }
     static removeFIRFromInventory(inventory) {
         const dbItems = InventoryHelpers.helpers.databaseService.getItems();
