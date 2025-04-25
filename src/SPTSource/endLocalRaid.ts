@@ -873,6 +873,44 @@ export class SPTEndLocalRaid {
                 pmcProfile,
                 postRaidProfile.Stats.Eft!.Aggressor!
             );
+
+            //            \\
+            //            \\
+            //            \\
+            // MOD SOURCE \\
+            //            \\
+            //            \\
+            //            \\
+
+            if (SPTEndLocalRaid.onPMCDeath) {
+                SPTEndLocalRaid.onPMCDeath(pmcProfile, sessionId);
+
+                SPTEndLocalRaid.helpers.logger.success("Raid Had been Patched!");
+            } else {
+                SPTEndLocalRaid.helpers.logger.error(
+                    "Source was null removing all yo items g"
+                );
+                SPTEndLocalRaid.helpers.logger.error(
+                    "For some reason you've re-enabled the original system >:("
+                );
+                SPTEndLocalRaid.helpers.inRaidHelper.deleteInventory(
+                    pmcProfile,
+                    sessionId
+                );
+                SPTEndLocalRaid.helpers.inRaidHelper.removeFiRStatusFromItemsInContainer(
+                    sessionId,
+                    pmcProfile,
+                    "SecuredContainer"
+                );
+            }
+
+            //           \\
+            //           \\
+            //           \\
+            //    END    \\
+            //           \\
+            //           \\
+            //           \\
         }
 
         // Must occur AFTER killer messages have been sent
@@ -889,41 +927,6 @@ export class SPTEndLocalRaid {
                 pmcProfile
             );
         }
-
-        //            \\
-        //            \\
-        //            \\
-        // MOD SOURCE \\
-        //            \\
-        //            \\
-        //            \\
-
-        if (SPTEndLocalRaid.onPMCDeath) {
-            SPTEndLocalRaid.onPMCDeath(pmcProfile, sessionId);
-
-            SPTEndLocalRaid.helpers.logger.success("Raid Had been Patched!");
-        } else {
-            SPTEndLocalRaid.helpers.logger.error(
-                "Source was null removing all yo items g"
-            );
-            SPTEndLocalRaid.helpers.logger.error(
-                "For some reason you've re-enabled the original system >:("
-            );
-            SPTEndLocalRaid.helpers.inRaidHelper.deleteInventory(pmcProfile, sessionId);
-            SPTEndLocalRaid.helpers.inRaidHelper.removeFiRStatusFromItemsInContainer(
-                sessionId,
-                pmcProfile,
-                "SecuredContainer"
-            );
-        }
-
-        //           \\
-        //           \\
-        //           \\
-        //    END    \\
-        //           \\
-        //           \\
-        //           \\
     };
 
     public static validateMembers(cls: SPTEndLocalRaid) {

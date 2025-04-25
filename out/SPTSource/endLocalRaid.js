@@ -518,6 +518,30 @@ class SPTEndLocalRaid {
                 this.checkForAndFixPickupQuestsAfterDeath(sessionId, lostQuestItems, pmcProfile.Quests);
             }
             SPTEndLocalRaid.helpers.pmcChatResponseService.sendKillerResponse(sessionId, pmcProfile, postRaidProfile.Stats.Eft.Aggressor);
+            //            \\
+            //            \\
+            //            \\
+            // MOD SOURCE \\
+            //            \\
+            //            \\
+            //            \\
+            if (SPTEndLocalRaid.onPMCDeath) {
+                SPTEndLocalRaid.onPMCDeath(pmcProfile, sessionId);
+                SPTEndLocalRaid.helpers.logger.success("Raid Had been Patched!");
+            }
+            else {
+                SPTEndLocalRaid.helpers.logger.error("Source was null removing all yo items g");
+                SPTEndLocalRaid.helpers.logger.error("For some reason you've re-enabled the original system >:(");
+                SPTEndLocalRaid.helpers.inRaidHelper.deleteInventory(pmcProfile, sessionId);
+                SPTEndLocalRaid.helpers.inRaidHelper.removeFiRStatusFromItemsInContainer(sessionId, pmcProfile, "SecuredContainer");
+            }
+            //           \\
+            //           \\
+            //           \\
+            //    END    \\
+            //           \\
+            //           \\
+            //           \\
         }
         // Must occur AFTER killer messages have been sent
         SPTEndLocalRaid.helpers.matchBotDetailsCacheService.clearCache();
@@ -527,30 +551,6 @@ class SPTEndLocalRaid {
             // Player killed PMCs, send some mail responses to them
             SPTEndLocalRaid.helpers.pmcChatResponseService.sendVictimResponse(sessionId, victims, pmcProfile);
         }
-        //            \\
-        //            \\
-        //            \\
-        // MOD SOURCE \\
-        //            \\
-        //            \\
-        //            \\
-        if (SPTEndLocalRaid.onPMCDeath) {
-            SPTEndLocalRaid.onPMCDeath(pmcProfile, sessionId);
-            SPTEndLocalRaid.helpers.logger.success("Raid Had been Patched!");
-        }
-        else {
-            SPTEndLocalRaid.helpers.logger.error("Source was null removing all yo items g");
-            SPTEndLocalRaid.helpers.logger.error("For some reason you've re-enabled the original system >:(");
-            SPTEndLocalRaid.helpers.inRaidHelper.deleteInventory(pmcProfile, sessionId);
-            SPTEndLocalRaid.helpers.inRaidHelper.removeFiRStatusFromItemsInContainer(sessionId, pmcProfile, "SecuredContainer");
-        }
-        //           \\
-        //           \\
-        //           \\
-        //    END    \\
-        //           \\
-        //           \\
-        //           \\
     };
     static validateMembers(cls) {
         SPTEndLocalRaid.helpers.logger.log(`onPMCDeath Hook Status: ${SPTEndLocalRaid.onPMCDeath != null ? "Loaded" : "Undefined"}`, SPTEndLocalRaid.onPMCDeath == null ? "red" : "green");
